@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="zh-TW" class="scroll-smooth">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,9 +9,8 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap"
-        rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
     <script>
         tailwind.config = {
             theme: {
@@ -43,28 +41,11 @@
 
     <style>
         /* CSS resets and custom scrollbar */
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            background-color: #fafaf9;
-            color: #292524;
-        }
-
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #f5f5f4;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #d6d3d1;
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #a8a29e;
-        }
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fafaf9; color: #292524; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f5f5f4; }
+        ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a8a29e; }
 
         /* Required Chart Container Styling */
         .chart-container {
@@ -80,59 +61,22 @@
             padding: 1rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
-
         @media (min-width: 768px) {
-            .chart-container {
-                height: 400px;
-                max-width: 100%;
-            }
+            .chart-container { height: 400px; max-width: 100%; }
         }
 
         /* Typography reading limits */
-        .prose-custom {
-            max-width: 75ch;
-            margin: 0 auto;
-            line-height: 1.8;
-            font-size: 1.125rem;
-        }
-
-        .prose-custom p {
-            margin-bottom: 1.5em;
-            text-align: justify;
-        }
-
-        .prose-custom h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #115e59;
-            margin-top: 2em;
-            margin-bottom: 1em;
-            border-bottom: 2px solid #e7e5e4;
-            padding-bottom: 0.5rem;
-        }
-
+        .prose-custom { max-width: 75ch; margin: 0 auto; line-height: 1.8; font-size: 1.125rem; }
+        .prose-custom p { margin-bottom: 1.5em; text-align: justify; }
+        .prose-custom h3 { font-size: 1.5rem; font-weight: 700; color: #115e59; margin-top: 2em; margin-bottom: 1em; border-bottom: 2px solid #e7e5e4; padding-bottom: 0.5rem; }
+        
         /* Accordion transition */
-        .accordion-content {
-            transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
-            max-height: 0;
-            opacity: 0;
-            overflow: hidden;
-        }
-
-        .accordion-content.active {
-            max-height: 1500px;
-            opacity: 1;
-            margin-top: 1rem;
-        }
-
-        .nav-link.active {
-            border-bottom-color: #0f766e;
-            color: #0f766e;
-            font-weight: 700;
-        }
+        .accordion-content { transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out; max-height: 0; opacity: 0; overflow: hidden; }
+        .accordion-content.active { max-height: 1500px; opacity: 1; margin-top: 1rem;}
+        
+        .nav-link.active { border-bottom-color: #0f766e; color: #0f766e; font-weight: 700; }
     </style>
 </head>
-
 <body class="antialiased text-stone-800 selection:bg-teal-200 selection:text-teal-900">
 
     <!-- Chosen Palette: Warm Neutrals (Stone) with Teal (Urban/Growth) and Copper (Human/Caution) accents -->
@@ -154,45 +98,38 @@
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
 
     <!-- Navigation -->
-    <nav
-        class="fixed w-full bg-white/90 backdrop-blur-md z-50 border-b border-stone-200 shadow-sm transition-all duration-300">
+    <nav class="fixed w-full bg-[#d3c9bc]/95 backdrop-blur-md z-50 border-b border-[#c2b6a7] shadow-sm transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
                     <span class="text-2xl font-black tracking-widest text-stone-800">品嘉建設</span>
                 </div>
                 <div class="hidden md:flex space-x-8 items-center">
-                    <a href="#guide"
-                        class="nav-link text-stone-600 hover:text-teal-700 px-1 py-5 border-b-2 border-transparent font-medium text-sm transition-colors">專家導讀</a>
-                    <a href="#analysis"
-                        class="nav-link text-stone-600 hover:text-teal-700 px-1 py-5 border-b-2 border-transparent font-medium text-sm transition-colors">深度剖析</a>
-                    <a href="#global"
-                        class="nav-link text-stone-600 hover:text-teal-700 px-1 py-5 border-b-2 border-transparent font-medium text-sm transition-colors">跨國借鏡</a>
-                    <a href="#appendix"
-                        class="nav-link text-stone-600 hover:text-teal-700 px-1 py-5 border-b-2 border-transparent font-medium text-sm transition-colors">附錄目錄</a>
+                    <a href="#guide" class="nav-link text-stone-700 hover:text-teal-800 px-1 py-5 border-b-2 border-transparent font-medium text-sm transition-colors">專家導讀</a>
+                    <a href="#analysis" class="nav-link text-stone-700 hover:text-teal-800 px-1 py-5 border-b-2 border-transparent font-medium text-sm transition-colors">深度剖析</a>
+                    <a href="#global" class="nav-link text-stone-700 hover:text-teal-800 px-1 py-5 border-b-2 border-transparent font-medium text-sm transition-colors">跨國借鏡</a>
+                    <a href="#appendix" class="nav-link text-stone-700 hover:text-teal-800 px-1 py-5 border-b-2 border-transparent font-medium text-sm transition-colors">附錄目錄</a>
                 </div>
                 <!-- Mobile menu button -->
                 <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-btn"
-                        class="text-stone-500 hover:text-stone-900 focus:outline-none text-2xl">
+                    <button id="mobile-menu-btn" class="text-stone-700 hover:text-stone-900 focus:outline-none text-2xl">
                         &#9776;
                     </button>
                 </div>
             </div>
         </div>
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-stone-200">
-            <a href="#guide" class="block px-4 py-3 text-stone-600 hover:bg-stone-50 hover:text-teal-700">專家導讀</a>
-            <a href="#analysis" class="block px-4 py-3 text-stone-600 hover:bg-stone-50 hover:text-teal-700">深度剖析</a>
-            <a href="#global" class="block px-4 py-3 text-stone-600 hover:bg-stone-50 hover:text-teal-700">跨國借鏡</a>
-            <a href="#appendix" class="block px-4 py-3 text-stone-600 hover:bg-stone-50 hover:text-teal-700">附錄目錄</a>
+        <div id="mobile-menu" class="hidden md:hidden bg-[#d3c9bc] border-t border-[#c2b6a7]">
+            <a href="#guide" class="block px-4 py-3 text-stone-700 hover:bg-[#c2b6a7] hover:text-teal-900 transition-colors">專家導讀</a>
+            <a href="#analysis" class="block px-4 py-3 text-stone-700 hover:bg-[#c2b6a7] hover:text-teal-900 transition-colors">深度剖析</a>
+            <a href="#global" class="block px-4 py-3 text-stone-700 hover:bg-[#c2b6a7] hover:text-teal-900 transition-colors">跨國借鏡</a>
+            <a href="#appendix" class="block px-4 py-3 text-stone-700 hover:bg-[#c2b6a7] hover:text-teal-900 transition-colors">附錄目錄</a>
         </div>
     </nav>
 
     <!-- Hero Section -->
     <header class="pt-28 pb-16 bg-stone-100 border-b border-stone-200 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-5"
-            style="background-image: radial-gradient(#292524 1px, transparent 1px); background-size: 20px 20px;"></div>
+        <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#292524 1px, transparent 1px); background-size: 20px 20px;"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
             <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-stone-900 tracking-tight leading-tight mb-4">
                 《破解釘子戶：最後10%，決定一切》
@@ -201,7 +138,7 @@
                 解開都市更新的關鍵密碼：從制度困境到國家工程的跨國視野
             </h2>
             <div class="flex flex-col items-center justify-center">
-                <p class="text-base font-bold text-stone-900">三十年資深都市更新專家 / 胡偉良 博士</p>
+                <p class="text-base font-bold text-stone-900">品嘉建設創辦人 / 胡偉良 博士</p>
                 <p class="text-sm text-stone-500 mt-1">報告導讀與政策分析</p>
             </div>
         </div>
@@ -223,36 +160,26 @@
                 </div>
 
                 <article class="prose-custom">
-                    <p
-                        class="text-xl font-medium text-teal-800 italic border-l-4 border-teal-600 pl-4 mb-8 bg-teal-50 py-4 px-4 rounded-r-lg">
+                    <p class="text-xl font-medium text-teal-800 italic border-l-4 border-teal-600 pl-4 mb-8 bg-teal-50 py-4 px-4 rounded-r-lg">
                         「當制度讓拖延可以換取更好的條件時，拖延自然會成為一種理性的選擇。釘子戶不是都市更新的原因，而是制度的結果。」
                     </p>
 
-                    <p>在當代城市治理的課題中，都市更新（Urban
-                        Renewal）無疑是一個最具挑戰性的議題，這不僅在台灣，在全亞洲乃至全球快速發展的都會區皆然。身為在都更領域深耕三十年的實務工作者與學者，我見證過無數因都更而重生的街廓，也看過更多因為少數幾戶的堅持，而讓整個社區在危險與破敗中虛耗數十年的悲劇。
-                    </p>
-
-                    <p>當我們拿到這份名為《最後10%，決定一切：破解釘子戶，解開都市更新的關鍵密碼》的報告時，社會大眾往往抱持著一種獵奇或對立的心態：究竟該如何「對付」這些阻礙發展的人？然而，本書作者卻精準地切中了問題的核心——<strong>這並不是一個單純的建築問題，更不是一場零和的道德審判。它涉及土地制度、法律防線、利益分配與社會信任，是一個高度複雜的公共治理課題。</strong>
-                    </p>
+                    <p>在當代城市治理的課題中，都市更新（Urban Renewal）無疑是一個最具挑戰性的議題，這不僅在台灣，在全亞洲乃至全球快速發展的都會區皆然。身為在都更領域深耕三十年的實務工作者與學者，我見證過無數因都更而重生的街廓，也看過更多因為少數幾戶的堅持，而讓整個社區在危險與破敗中虛耗數十年的悲劇。</p>
+                    
+                    <p>當我們拿到這份名為《最後10%，決定一切：破解釘子戶，解開都市更新的關鍵密碼》的報告時，社會大眾往往抱持著一種獵奇或對立的心態：究竟該如何「對付」這些阻礙發展的人？然而，本書作者卻精準地切中了問題的核心——<strong>這並不是一個單純的建築問題，更不是一場零和的道德審判。它涉及土地制度、法律防線、利益分配與社會信任，是一個高度複雜的公共治理課題。</strong></p>
 
                     <h3>破題：釘子戶是果，制度才是因</h3>
-                    <p>長久以來，台灣社會在探討都更推動困難時，輿論往往將責任歸咎於所謂的「釘子戶」（不同意戶）。媒體上的畫面總是建商的怪手與死守家園的老弱婦孺對峙，或是要求天價補償的貪婪形象。但本書提出了一個極具顛覆性、卻無比真實的觀點：<strong>制度的設計，誘發了人性的貪婪與恐懼。</strong>
-                    </p>
-                    <p>如果一套遊戲規則告訴參與者：「越晚簽約，拿到的籌碼可能越多」，那麼基於理性經濟人的計算，拒絕妥協就成為了最合理的策略。當制度允許少數人可以長期且合法地阻擋多數人的公共利益與居住安全時，都市更新自然會陷入泥淖。因此，我們真正需要思考的問題，從來不是如何用更強硬的手段去「拔釘子」，而是如何建立一套更合理的制度，使得「合作比對抗更有利」。
-                    </p>
+                    <p>長久以來，台灣社會在探討都更推動困難時，輿論往往將責任歸咎於所謂的「釘子戶」（不同意戶）。媒體上的畫面總是建商的怪手與死守家園的老弱婦孺對峙，或是要求天價補償的貪婪形象。但本書提出了一個極具顛覆性、卻無比真實的觀點：<strong>制度的設計，誘發了人性的貪婪與恐懼。</strong></p>
+                    <p>如果一套遊戲規則告訴參與者：「越晚簽約，拿到的籌碼可能越多」，那麼基於理性經濟人的計算，拒絕妥協就成為了最合理的策略。當制度允許少數人可以長期且合法地阻擋多數人的公共利益與居住安全時，都市更新自然會陷入泥淖。因此，我們真正需要思考的問題，從來不是如何用更強硬的手段去「拔釘子」，而是如何建立一套更合理的制度，使得「合作比對抗更有利」。</p>
 
                     <h3>人性、產權與利益的修羅場</h3>
-                    <p>本書詳細剖析了最後10%未同意戶的組成。他們並非鐵板一塊，其背後有著極度複雜的光譜。有些人是出於對老屋的情感依戀；有些人是對建商與政府充滿不信任，深怕被剝奪；但不可諱言，有極大一部分是為了爭取超額的經濟利益。在台灣高度保障私有產權的憲政架構下，財產權的絕對性往往被無限上綱，忽略了都市空間的「社會連帶責任」。
-                    </p>
-                    <p>都市更新的本質是「產權的重組與價值的重新分配」。當一棟老舊公寓要改建，它不再是你家那一戶的事，而是全體住戶共同將零碎的土地整併，創造出更大的容積與經濟價值。這其中牽涉到極為複雜的權利變換機制。如果缺乏強而有力的公權力作為仲裁與後盾，僅靠民間建商與地主在資訊極度不對稱的情況下進行私法協商，必然會演變成一場漫長且充滿猜忌的消耗戰。
-                    </p>
+                    <p>本書詳細剖析了最後10%未同意戶的組成。他們並非鐵板一塊，其背後有著極度複雜的光譜。有些人是出於對老屋的情感依戀；有些人是對建商與政府充滿不信任，深怕被剝奪；但不可諱言，有極大一部分是為了爭取超額的經濟利益。在台灣高度保障私有產權的憲政架構下，財產權的絕對性往往被無限上綱，忽略了都市空間的「社會連帶責任」。</p>
+                    <p>都市更新的本質是「產權的重組與價值的重新分配」。當一棟老舊公寓要改建，它不再是你家那一戶的事，而是全體住戶共同將零碎的土地整併，創造出更大的容積與經濟價值。這其中牽涉到極為複雜的權利變換機制。如果缺乏強而有力的公權力作為仲裁與後盾，僅靠民間建商與地主在資訊極度不對稱的情況下進行私法協商，必然會演變成一場漫長且充滿猜忌的消耗戰。</p>
 
                     <h3>從對抗走向合作：制度改革的解方</h3>
                     <p>這份報告的價值在於它不只點出問題，更提出了系統性的解方。作者強調，要破解釘子戶困境，必須從「誘因機制」與「公權力介入」雙管齊下。</p>
-                    <p>在誘因機制上，必須打破「會吵的小孩有糖吃」的惡性循環。政府的政策應確保權利變換的公平性與透明度，讓「早簽約」與「晚簽約」的條件一致，甚至給予早期同意者合理的獎勵。當「等待」不再能創造超額利潤，釘子戶的經濟誘因便會大幅降低。
-                    </p>
-                    <p>在公權力介入上，我們必須重新定義「多數決」與「公共利益」。當一個老舊社區的建築結構已經危及公共安全（例如台灣常見的耐震能力不足、海砂屋），且已取得絕大多數居民（例如80%或90%）的同意時，政府就必須勇敢承擔起責任，依法執行代為拆除或強制介入。<strong>「城市會前進，但不會等每一個人。」</strong>這句話看似殘酷，卻是都市發展的鐵律。政府不能因為害怕面對少數人的抗爭，而犧牲了多數人免於恐懼的居住權益。
-                    </p>
+                    <p>在誘因機制上，必須打破「會吵的小孩有糖吃」的惡性循環。政府的政策應確保權利變換的公平性與透明度，讓「早簽約」與「晚簽約」的條件一致，甚至給予早期同意者合理的獎勵。當「等待」不再能創造超額利潤，釘子戶的經濟誘因便會大幅降低。</p>
+                    <p>在公權力介入上，我們必須重新定義「多數決」與「公共利益」。當一個老舊社區的建築結構已經危及公共安全（例如台灣常見的耐震能力不足、海砂屋），且已取得絕大多數居民（例如80%或90%）的同意時，政府就必須勇敢承擔起責任，依法執行代為拆除或強制介入。<strong>「城市會前進，但不會等每一個人。」</strong>這句話看似殘酷，卻是都市發展的鐵律。政府不能因為害怕面對少數人的抗爭，而犧牲了多數人免於恐懼的居住權益。</p>
 
                     <h3>結語：都市更新是一項長期的國家工程</h3>
                     <p>作為導讀，我希望讀者在翻開這本書時，能將視角拉高。都市更新並不只是建商賺錢的工具，也不僅僅是老屋換新屋的財富遊戲。它深刻地關係到：</p>
@@ -261,8 +188,7 @@
                         <li><strong>居住品質：</strong>高齡化社會來臨，缺乏電梯與無障礙設施的老公寓已成為長者的牢籠。</li>
                         <li><strong>都市競爭力：</strong>破敗的市容與缺乏現代化基礎設施的街廓，將使城市失去吸引人才與投資的能力。</li>
                     </ul>
-                    <p>如果都市更新無法有效推動，城市老化問題將會呈現指數型加劇。因此，都市更新必須被視為一項「國家工程」，而非純粹的市場行為。唯有透過全盤的制度改革、政府的強勢引導以及社會大眾觀念的翻轉，台灣的城市才能持續呼吸、代謝，最終實現真正的重生。
-                    </p>
+                    <p>如果都市更新無法有效推動，城市老化問題將會呈現指數型加劇。因此，都市更新必須被視為一項「國家工程」，而非純粹的市場行為。唯有透過全盤的制度改革、政府的強勢引導以及社會大眾觀念的翻轉，台灣的城市才能持續呼吸、代謝，最終實現真正的重生。</p>
                 </article>
             </div>
         </section>
@@ -303,20 +229,12 @@
                     <!-- Left: Interactive Chart & Controls -->
                     <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200 shadow-sm">
                         <div class="flex flex-wrap gap-2 mb-6 justify-center">
-                            <button
-                                class="country-btn bg-teal-700 text-white px-4 py-2 rounded-lg font-bold shadow transition-transform hover:scale-105"
-                                data-country="tw">🇹🇼 台灣 (Taiwan)</button>
-                            <button
-                                class="country-btn bg-white text-stone-600 border border-stone-300 px-4 py-2 rounded-lg font-bold shadow-sm transition-transform hover:scale-105"
-                                data-country="jp">🇯🇵 日本 (Japan)</button>
-                            <button
-                                class="country-btn bg-white text-stone-600 border border-stone-300 px-4 py-2 rounded-lg font-bold shadow-sm transition-transform hover:scale-105"
-                                data-country="sg">🇸🇬 新加坡 (Singapore)</button>
-                            <button
-                                class="country-btn bg-white text-stone-600 border border-stone-300 px-4 py-2 rounded-lg font-bold shadow-sm transition-transform hover:scale-105"
-                                data-country="kr">🇰🇷 韓國 (S. Korea)</button>
+                            <button class="country-btn bg-teal-700 text-white px-4 py-2 rounded-lg font-bold shadow transition-transform hover:scale-105" data-country="tw">🇹🇼 台灣 (Taiwan)</button>
+                            <button class="country-btn bg-white text-stone-600 border border-stone-300 px-4 py-2 rounded-lg font-bold shadow-sm transition-transform hover:scale-105" data-country="jp">🇯🇵 日本 (Japan)</button>
+                            <button class="country-btn bg-white text-stone-600 border border-stone-300 px-4 py-2 rounded-lg font-bold shadow-sm transition-transform hover:scale-105" data-country="sg">🇸🇬 新加坡 (Singapore)</button>
+                            <button class="country-btn bg-white text-stone-600 border border-stone-300 px-4 py-2 rounded-lg font-bold shadow-sm transition-transform hover:scale-105" data-country="kr">🇰🇷 韓國 (S. Korea)</button>
                         </div>
-
+                        
                         <!-- CRITICAL: Chart Container -->
                         <div class="chart-container">
                             <canvas id="radarChart"></canvas>
@@ -328,8 +246,7 @@
                     </div>
 
                     <!-- Right: Dynamic Detail Panel -->
-                    <div id="country-detail-panel"
-                        class="bg-white p-8 rounded-2xl border border-stone-200 shadow-md h-full">
+                    <div id="country-detail-panel" class="bg-white p-8 rounded-2xl border border-stone-200 shadow-md h-full">
                         <!-- Populated by JS -->
                     </div>
                 </div>
@@ -341,27 +258,41 @@
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl font-black text-white mb-4 inline-block relative">
-                        附錄：全書目錄提取
+                        附錄：全書大綱架構
                         <span class="absolute -bottom-2 left-0 w-1/2 h-1 bg-teal-500 rounded"></span>
                     </h2>
                     <p class="text-stone-400">
-                        《破解釘子戶：最後10%，決定一切》原書架構與章節概覽。
+                        《破解釘子戶：最後10%，決定一切》全書核心篇章與結構概覽。
                     </p>
                 </div>
 
                 <div class="bg-stone-800 rounded-xl p-8 border border-stone-700 shadow-xl">
                     <h3 class="text-xl font-bold text-teal-400 mb-6 border-b border-stone-700 pb-2">《最後 10% ，決定一切》</h3>
-                    <ul class="space-y-4 text-stone-300">
-                        <li><span class="font-bold text-white">推薦序（一）</span> 都市更新的真正難題</li>
-                        <li><span class="font-bold text-white">第一章</span> 導論：城市老化的必然與都更的困境</li>
-                        <li><span class="font-bold text-white">第二章</span> 制度的產物：為什麼會產生釘子戶？</li>
-                        <li><span class="font-bold text-white">第三章</span> 利益的算計：產權、容積與權利變換的秘密</li>
-                        <li><span class="font-bold text-white">第四章</span> 信任的崩解：建商、地主與政府的三方博弈</li>
-                        <li><span class="font-bold text-white">第五章</span> 制度的漏洞：同意比例與代為拆除的法律攻防</li>
-                        <li><span class="font-bold text-white">第六章</span> 他山之石：國際都市更新機制的借鏡</li>
-                        <li><span class="font-bold text-white">第七章</span> 破局的策略：重建誘因機制與透明協商平台</li>
-                        <li><span class="font-bold text-white">第八章</span> 國家的責任：從市場行為到政府主導的公辦都更</li>
-                        <li><span class="font-bold text-white">第九章</span> 最終答案：城市會前進，但不會等所有人</li>
+                    <ul class="space-y-2 text-stone-300 text-lg">
+                        <li class="flex flex-col sm:flex-row sm:items-center p-4 bg-stone-900/50 rounded-lg transition-colors hover:bg-stone-700/50">
+                            <span class="font-bold text-copper-500 w-32 shrink-0 tracking-widest text-xl">序章</span>
+                            <span class="text-white font-medium">一個卡住二十年的都更案</span>
+                        </li>
+                        <li class="flex flex-col sm:flex-row sm:items-center p-4 rounded-lg transition-colors hover:bg-stone-700/50">
+                            <span class="font-bold text-copper-500 w-32 shrink-0 tracking-widest text-xl">第一篇</span>
+                            <span class="text-white font-medium">問題與本質（第一部～第五部）</span>
+                        </li>
+                        <li class="flex flex-col sm:flex-row sm:items-center p-4 bg-stone-900/50 rounded-lg transition-colors hover:bg-stone-700/50">
+                            <span class="font-bold text-copper-500 w-32 shrink-0 tracking-widest text-xl">第二篇</span>
+                            <span class="text-white font-medium">驗證與現實（第六部～第七部）</span>
+                        </li>
+                        <li class="flex flex-col sm:flex-row sm:items-center p-4 rounded-lg transition-colors hover:bg-stone-700/50">
+                            <span class="font-bold text-copper-500 w-32 shrink-0 tracking-widest text-xl">第三篇</span>
+                            <span class="text-white font-medium">解法與模型（第八部：品嘉模式）</span>
+                        </li>
+                        <li class="flex flex-col sm:flex-row sm:items-center p-4 bg-stone-900/50 rounded-lg transition-colors hover:bg-stone-700/50">
+                            <span class="font-bold text-copper-500 w-32 shrink-0 tracking-widest text-xl">第四篇</span>
+                            <span class="text-white font-medium">未來與格局</span>
+                        </li>
+                        <li class="flex flex-col sm:flex-row sm:items-center p-4 rounded-lg transition-colors hover:bg-stone-700/50">
+                            <span class="font-bold text-copper-500 w-32 shrink-0 tracking-widest text-xl">總結</span>
+                            <span class="text-white font-medium">全書總結與核心啟示</span>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -371,8 +302,7 @@
     <!-- Footer -->
     <footer class="bg-black text-stone-400 py-8 text-center text-sm">
         <div class="max-w-7xl mx-auto px-4">
-            <p>&copy; 2026 UR Expert Consulting. Urban Renewal Analysis Report Dashboard.</p>
-            <p class="mt-2 text-stone-600">設計為單頁式互動應用程式以促進知識傳遞。</p>
+            <p>&copy; 2026 品嘉建設</p>
         </div>
     </footer>
 
@@ -404,7 +334,7 @@
             let current = '';
             const sections = document.querySelectorAll('section');
             const navLinks = document.querySelectorAll('.nav-link');
-
+            
             sections.forEach(section => {
                 const sectionTop = section.offsetTop;
                 const sectionHeight = section.clientHeight;
@@ -731,7 +661,7 @@
         // --- Chart.js Initialization ---
         let radarChart;
         const ctx = document.getElementById('radarChart').getContext('2d');
-
+        
         // Define common chart options enforcing boundaries
         const chartOptions = {
             responsive: true,
@@ -808,7 +738,7 @@
 
             // Update Text Content
             detailPanel.innerHTML = countryData[key].details;
-
+            
             // Add subtle fade animation to content
             detailPanel.style.opacity = '0.5';
             setTimeout(() => { detailPanel.style.opacity = '1'; detailPanel.style.transition = 'opacity 0.3s ease'; }, 50);
@@ -833,5 +763,4 @@
 
     </script>
 </body>
-
 </html>
