@@ -1,53 +1,47 @@
 <!DOCTYPE html>
-<html lang="zh-TW" class="scroll-smooth">
+<html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>都市更新深度剖析：《最後10%，決定一切》</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <title>《最後10%，決定一切》都市更新專家解析儀表板</title>
     
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Noto Sans TC"', 'sans-serif'],
-                    },
-                    colors: {
-                        stone: {
-                            50: '#fafaf9',
-                            100: '#f5f5f4',
-                            800: '#292524',
-                            900: '#1c1917',
-                        },
-                        copper: {
-                            500: '#b45309', // For highlights/warnings
-                            600: '#92400e',
-                        },
-                        teal: {
-                            700: '#0f766e', // Primary brand color
-                            800: '#115e59',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Chosen Palette: Warm Neutrals (Stone) with Amber and Teal accents for a calm, professional, yet engaging analytical feel. -->
+    
+    <!-- Application Structure Plan: 
+         1. Hero Section: Sets the tone, introduces the author (品嘉關係企業創辦人 胡偉良 博士) and brand (品嘉關係企業).
+         2. Expert Guide: Pure-text reading experience focused on the book's core philosophy with the new evocative text.
+         3. International Analysis: Dynamic radar chart that fully isolates the selected country (no baseline).
+         4. Book Deep Dive: 7 specific accordions matching the report structure, now with the detailed 12 Iron Rules included.
+         5. Appendix & TOC: Highly enriched filterable grid for 9 Q&As and 3 Cases, followed by the TOC tree.
+    -->
+
+    <!-- Visualization & Content Choices: 
+         - Radar Chart (International Comparison): Dynamic array replacement ensures ONLY the selected country is rendered.
+         - NO SVG/Mermaid used.
+    -->
 
     <style>
-        /* CSS resets and custom scrollbar */
-        body { font-family: 'Noto Sans TC', sans-serif; background-color: #fafaf9; color: #292524; }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f5f5f4; }
-        ::-webkit-scrollbar-thumb { background: #d6d3d1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #a8a29e; }
-
-        /* Required Chart Container Styling */
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f5f5f4; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d6d3d1; 
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #a8a29e; 
+        }
         .chart-container {
             position: relative;
             width: 100%;
@@ -56,711 +50,758 @@
             margin-right: auto;
             height: 350px;
             max-height: 400px;
-            background-color: white;
-            border-radius: 0.75rem;
-            padding: 1rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
-        @media (min-width: 768px) {
-            .chart-container { height: 400px; max-width: 100%; }
+        @media (max-width: 768px) {
+            .chart-container {
+                height: 250px;
+            }
         }
-
-        /* Typography reading limits */
-        .prose-custom { max-width: 75ch; margin: 0 auto; line-height: 1.8; font-size: 1.125rem; }
-        .prose-custom p { margin-bottom: 1.5em; text-align: justify; }
-        .prose-custom h3 { font-size: 1.5rem; font-weight: 700; color: #115e59; margin-top: 2em; margin-bottom: 1em; border-bottom: 2px solid #e7e5e4; padding-bottom: 0.5rem; }
-        
-        /* Accordion transition */
-        .accordion-content { transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out; max-height: 0; opacity: 0; overflow: hidden; }
-        .accordion-content.active { max-height: 1500px; opacity: 1; margin-top: 1rem;}
-        
-        .nav-link.active { border-bottom-color: #0f766e; color: #0f766e; font-weight: 700; }
     </style>
 </head>
-<body class="antialiased text-stone-800 selection:bg-teal-200 selection:text-teal-900">
+<body class="bg-stone-50 text-stone-800 antialiased selection:bg-teal-200 selection:text-teal-900">
 
-    <!-- Chosen Palette: Warm Neutrals (Stone) with Teal (Urban/Growth) and Copper (Human/Caution) accents -->
-    <!-- Application Structure Plan: 
-        1. Fixed Top Navigation for easy access.
-        2. Hero Section: Establishes authority (30-year expert persona) and context.
-        3. Expert Guide (導讀): A clean, distraction-free reading layout for the long-form essay.
-        4. Chapter Analysis (深度剖析): Accordion UI. Completely updated with user's specific text. Chosen because urban renewal details are dense; accordions allow users to scan chapter titles and drill down into specifics without being overwhelmed by text walls. Structured with bullet points and highlighted sections for readability.
-        5. Global Comparison (跨國比較): Interactive Dashboard. A Radar Chart visualizes policy differences at a glance, paired with selectable country cards.
-        6. Appendix (附錄): Simple list format.
-    -->
-    <!-- Visualization & Content Choices: 
-        - Goal: Organize the deep structural analysis from the report.
-        - Viz Method: Interactive Accordion List (HTML/CSS/JS).
-        - Interaction: Click to expand detailed analysis for each core concept.
-        - Justification: Best for deep text content that needs to be categorized. Keeps the page clean while offering depth on demand.
-        - CONFIRMATION: NO SVG or Mermaid JS used. Interactive elements rely on JS and DOM manipulation.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-
-    <!-- Navigation -->
-    <nav class="fixed w-full bg-[#d3c9bc]/95 backdrop-blur-md z-50 border-b border-[#c2b6a7] shadow-sm transition-all duration-300">
+    <nav class="fixed top-0 w-full bg-stone-100/90 backdrop-blur-md border-b border-stone-200 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
-                <div class="flex items-center">
-                    <span class="text-2xl font-black tracking-widest text-stone-800">品嘉建設</span>
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl text-teal-700">&#10035;</span>
+                    <span class="font-bold text-xl tracking-wider text-stone-900">品嘉關係企業</span>
                 </div>
-                <div class="hidden md:flex space-x-8 items-center">
-                    <a href="#guide" class="nav-link text-stone-700 hover:text-teal-800 px-1 py-5 border-b-2 border-transparent font-medium text-sm transition-colors">專家導讀</a>
-                    <a href="#analysis" class="nav-link text-stone-700 hover:text-teal-800 px-1 py-5 border-b-2 border-transparent font-medium text-sm transition-colors">深度剖析</a>
-                    <a href="#global" class="nav-link text-stone-700 hover:text-teal-800 px-1 py-5 border-b-2 border-transparent font-medium text-sm transition-colors">跨國借鏡</a>
-                    <a href="#appendix" class="nav-link text-stone-700 hover:text-teal-800 px-1 py-5 border-b-2 border-transparent font-medium text-sm transition-colors">附錄目錄</a>
-                </div>
-                <!-- Mobile menu button -->
-                <div class="md:hidden flex items-center">
-                    <button id="mobile-menu-btn" class="text-stone-700 hover:text-stone-900 focus:outline-none text-2xl">
-                        &#9776;
-                    </button>
+                <div class="hidden md:flex space-x-6 text-sm font-medium">
+                    <a href="#guide" class="text-stone-600 hover:text-teal-700 transition">專家導讀</a>
+                    <a href="#global" class="text-stone-600 hover:text-teal-700 transition">國際視野</a>
+                    <a href="#analysis" class="text-stone-600 hover:text-teal-700 transition">深度剖析</a>
+                    <a href="#appendix" class="text-stone-600 hover:text-teal-700 transition">實務附錄</a>
                 </div>
             </div>
-        </div>
-        <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-[#d3c9bc] border-t border-[#c2b6a7]">
-            <a href="#guide" class="block px-4 py-3 text-stone-700 hover:bg-[#c2b6a7] hover:text-teal-900 transition-colors">專家導讀</a>
-            <a href="#analysis" class="block px-4 py-3 text-stone-700 hover:bg-[#c2b6a7] hover:text-teal-900 transition-colors">深度剖析</a>
-            <a href="#global" class="block px-4 py-3 text-stone-700 hover:bg-[#c2b6a7] hover:text-teal-900 transition-colors">跨國借鏡</a>
-            <a href="#appendix" class="block px-4 py-3 text-stone-700 hover:bg-[#c2b6a7] hover:text-teal-900 transition-colors">附錄目錄</a>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <header class="pt-28 pb-16 bg-stone-100 border-b border-stone-200 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-5" style="background-image: radial-gradient(#292524 1px, transparent 1px); background-size: 20px 20px;"></div>
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-stone-900 tracking-tight leading-tight mb-4">
-                《破解釘子戶：最後10%，決定一切》
-            </h1>
-            <h2 class="text-xl md:text-2xl text-stone-600 font-medium mb-8 max-w-3xl mx-auto">
-                解開都市更新的關鍵密碼：從制度困境到國家工程的跨國視野
-            </h2>
-            <div class="flex flex-col items-center justify-center">
-                <p class="text-base font-bold text-stone-900">品嘉建設創辦人 / 胡偉良 博士</p>
-                <p class="text-sm text-stone-500 mt-1">報告導讀與政策分析</p>
+    <header class="pt-32 pb-16 bg-gradient-to-b from-stone-200 to-stone-50 border-b border-stone-200">
+        <div class="max-w-5xl mx-auto px-4 text-center">
+            <div class="inline-block px-3 py-1 mb-6 rounded-full bg-amber-100 text-amber-800 text-sm font-semibold tracking-wide shadow-sm">
+                30年資深專家權威解析
             </div>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-black text-stone-900 leading-tight mb-4">
+                《最後10%，決定一切》
+                <span class="block text-teal-700 mt-2 text-3xl md:text-4xl">破解釘子戶，解開都市更新的關鍵密碼</span>
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-stone-700 font-bold mb-8">
+                作者：<span class="text-teal-800 border-b-2 border-amber-400">品嘉關係企業創辦人 胡偉良 博士</span>
+            </p>
+
+            <p class="mt-4 text-lg md:text-xl text-stone-600 max-w-3xl mx-auto leading-relaxed">
+                都市更新，從來不只是拆房子、蓋新樓。它是一場與時間競賽、與人性博弈、與制度磨合的過程。本系統將帶您從宏觀國際政策到微觀人性心理，全面破解都更困境。
+            </p>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main>
-        <!-- Section 1: Expert Guide -->
-        <section id="guide" class="py-20 bg-white">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-black text-stone-900 mb-4 inline-block relative">
-                        專家導讀
-                        <span class="absolute -bottom-2 left-0 w-1/2 h-1 bg-teal-600 rounded"></span>
-                    </h2>
-                    <p class="text-stone-600 max-w-2xl mx-auto">
-                        本區塊提供對《破解釘子戶》一書的核心思想解析。旨在幫助讀者快速掌握書中「制度決定行為」的論點，並將都市更新的層次由建商與地主的利益博弈，提升至國家安全與城市競爭力的高度。
-                    </p>
-                </div>
+    <!-- Section 1: Expert Guide (專家導讀) -->
+    <section id="guide" class="py-20 px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-stone-900 border-b-4 border-teal-600 inline-block pb-2">卷首語：專家導讀</h2>
+                <p class="mt-4 text-stone-600">從「對付」轉向「共贏」，建立宏觀的都市更新閱讀框架。</p>
+            </div>
 
-                <article class="prose-custom">
-                    <p class="text-xl font-medium text-teal-800 italic border-l-4 border-teal-600 pl-4 mb-8 bg-teal-50 py-4 px-4 rounded-r-lg">
-                        「當制度讓拖延可以換取更好的條件時，拖延自然會成為一種理性的選擇。釘子戶不是都市更新的原因，而是制度的結果。」
-                    </p>
-
-                    <p>在當代城市治理的課題中，都市更新（Urban Renewal）無疑是一個最具挑戰性的議題，這不僅在台灣，在全亞洲乃至全球快速發展的都會區皆然。身為在都更領域深耕三十年的實務工作者與學者，我見證過無數因都更而重生的街廓，也看過更多因為少數幾戶的堅持，而讓整個社區在危險與破敗中虛耗數十年的悲劇。</p>
+            <div class="bg-white rounded-2xl shadow-md p-8 md:p-16">
+                <article class="prose prose-stone max-w-none text-justify leading-loose">
+                    <h3 class="text-2xl font-bold text-teal-800 mb-6">當城市的時鐘停下來──讀《最後10%，決定一切》</h3>
                     
-                    <p>當我們拿到這份名為《最後10%，決定一切：破解釘子戶，解開都市更新的關鍵密碼》的報告時，社會大眾往往抱持著一種獵奇或對立的心態：究竟該如何「對付」這些阻礙發展的人？然而，本書作者卻精準地切中了問題的核心——<strong>這並不是一個單純的建築問題，更不是一場零和的道德審判。它涉及土地制度、法律防線、利益分配與社會信任，是一個高度複雜的公共治理課題。</strong></p>
+                    <p>在台北市某些街道轉角，你偶爾會目擊一種奇異的並置：一側是剛竣工的二十層住宅大樓，外牆光潔，門廳明亮，地下停車場的坡道延伸至視線之外；另一側，緊貼著它的，是一棟三、四層的老公寓，磁磚剝落，鐵窗鏽蝕，一樓騎樓堆著歲月遺留下的雜物。兩棟建築的間距，不過幾十公分，卻彷彿隔著幾十年。</p>
+                    
+                    <p>這種現象，在都市更新的語彙裡有個專有名詞：「都更孤島」。</p>
+                    
+                    <p>它不是天災造成的，也不是政策疏漏的意外。在許多案例中，孤島的形成，僅僅源於一個決定──或者更準確地說，一個遲遲無法做出的決定。《最後10%，決定一切》這本書，正是從這個微小而沉重的起點出發，一路追問：為什麼一棟老房子，可以拖住一座城市的更新？</p>
 
-                    <h3>破題：釘子戶是果，制度才是因</h3>
-                    <p>長久以來，台灣社會在探討都更推動困難時，輿論往往將責任歸咎於所謂的「釘子戶」（不同意戶）。媒體上的畫面總是建商的怪手與死守家園的老弱婦孺對峙，或是要求天價補償的貪婪形象。但本書提出了一個極具顛覆性、卻無比真實的觀點：<strong>制度的設計，誘發了人性的貪婪與恐懼。</strong></p>
-                    <p>如果一套遊戲規則告訴參與者：「越晚簽約，拿到的籌碼可能越多」，那麼基於理性經濟人的計算，拒絕妥協就成為了最合理的策略。當制度允許少數人可以長期且合法地阻擋多數人的公共利益與居住安全時，都市更新自然會陷入泥淖。因此，我們真正需要思考的問題，從來不是如何用更強硬的手段去「拔釘子」，而是如何建立一套更合理的制度，使得「合作比對抗更有利」。</p>
+                    <h4 class="text-xl font-bold text-stone-800 mt-8 mb-4 border-l-4 border-amber-500 pl-4">釘子戶，是制度的必然產物</h4>
+                    <p>本書最具顛覆性的洞見，出現在第一頁便已奠定：<strong>釘子戶不是都市更新失敗的原因，而是制度設計下的理性結果。</strong></p>
+                    <p>這句話值得細細咀嚼。長久以來，輿論習慣將都市更新的停滯歸咎於少數「不理性」的住戶，彷彿只要這些人被說服、被收買、甚至被強制，問題便迎刃而解。作者胡偉良博士以數十年的第一線整合經驗，提出了截然不同的診斷：當一套制度允許「拖延」可以換取更好的條件，當「最後才簽約的人」反而享有最大的談判籌碼，那麼選擇觀望、選擇等待，就不是什麼道德瑕疵，而是完全符合個人利益最大化的理性選擇。</p>
+                    <p>問題從來不在於人心的善惡，而在於規則的設計。</p>
+                    <p>書中借用行為經濟學的框架，精準解析了都市更新現場反覆上演的「囚徒困境」：每一個住戶個別看來都做出了「對自己最有利」的選擇，但所有人加總起來，結果卻是整個社區被鎖死在集體不理性的泥淖之中。這種「個體理性導致集體停滯」的困境，不需要壞人，只需要一個設計不良的制度。</p>
 
-                    <h3>人性、產權與利益的修羅場</h3>
-                    <p>本書詳細剖析了最後10%未同意戶的組成。他們並非鐵板一塊，其背後有著極度複雜的光譜。有些人是出於對老屋的情感依戀；有些人是對建商與政府充滿不信任，深怕被剝奪；但不可諱言，有極大一部分是為了爭取超額的經濟利益。在台灣高度保障私有產權的憲政架構下，財產權的絕對性往往被無限上綱，忽略了都市空間的「社會連帶責任」。</p>
-                    <p>都市更新的本質是「產權的重組與價值的重新分配」。當一棟老舊公寓要改建，它不再是你家那一戶的事，而是全體住戶共同將零碎的土地整併，創造出更大的容積與經濟價值。這其中牽涉到極為複雜的權利變換機制。如果缺乏強而有力的公權力作為仲裁與後盾，僅靠民間建商與地主在資訊極度不對稱的情況下進行私法協商，必然會演變成一場漫長且充滿猜忌的消耗戰。</p>
+                    <h4 class="text-xl font-bold text-stone-800 mt-8 mb-4 border-l-4 border-teal-500 pl-4">時間，才是都更最昂貴的成本</h4>
+                    <p>如果說釘子戶現象是本書的切入點，那麼「時間」便是貫穿全書最殘酷的主題。</p>
+                    <p>許多住戶在談判桌上心存僥倖：再等等，房價也許會更高；再撐一下，建商給的條件也許會更好。然而作者用一組冷靜的數據揭示了這個等待神話的破滅：台灣的營建成本因碳費政策、土方新制、綠容率要求與缺工缺料問題，正以結構性的方式持續攀升，而非循環性的波動。每晚一年整合，地主實際可分回的比例就下降一次；共同負擔比（共負比）已從過去的 45% 逼近 55% 甚至更高，且這個趨勢不可逆。</p>
+                    <p>書中指出，台灣都市更新的整體成功率，從整合送件到最終完工，估算約僅有 2%。這個數字令人震驚，卻也點出了一個殘酷的現實：所謂「等待改建」，其實是在用每天老化的房子，賭一個機率極低的未來。選擇「不前進」，並不代表維持現狀，而是意味著緩慢地被城市的新陳代謝所淘汰。</p>
 
-                    <h3>從對抗走向合作：制度改革的解方</h3>
-                    <p>這份報告的價值在於它不只點出問題，更提出了系統性的解方。作者強調，要破解釘子戶困境，必須從「誘因機制」與「公權力介入」雙管齊下。</p>
-                    <p>在誘因機制上，必須打破「會吵的小孩有糖吃」的惡性循環。政府的政策應確保權利變換的公平性與透明度，讓「早簽約」與「晚簽約」的條件一致，甚至給予早期同意者合理的獎勵。當「等待」不再能創造超額利潤，釘子戶的經濟誘因便會大幅降低。</p>
-                    <p>在公權力介入上，我們必須重新定義「多數決」與「公共利益」。當一個老舊社區的建築結構已經危及公共安全（例如台灣常見的耐震能力不足、海砂屋），且已取得絕大多數居民（例如80%或90%）的同意時，政府就必須勇敢承擔起責任，依法執行代為拆除或強制介入。<strong>「城市會前進，但不會等每一個人。」</strong>這句話看似殘酷，卻是都市發展的鐵律。政府不能因為害怕面對少數人的抗爭，而犧牲了多數人免於恐懼的居住權益。</p>
+                    <h4 class="text-xl font-bold text-stone-800 mt-8 mb-4 border-l-4 border-blue-500 pl-4">80%陷阱與最後一戶幻想</h4>
+                    <p>本書另一個極具實務價值的概念，是對「80%陷阱」的解剖。</p>
+                    <p>在整合同意比例突破 80% 法定門檻之前，社區面對的通常是理解問題：住戶在評估制度的合理性，在觀察鄰居的態度，在形成共識。但當比例逼近 80% 之後，問題的性質發生了本質轉變，進入了博弈問題的範疇。此時，剩餘的少數住戶會清楚意識到自身位置的稀缺性，誤以為自己掌握了對全案的否決權與定價權，進而陷入「最後一戶幻想」——相信只要再撐下去，整合方終將屈服，給出超乎尋常的條件。</p>
+                    <p>這種幻想幾乎從未成真。書中反覆指出：成熟的整合者在面對這種局面時，寧可選擇將該戶別劃出更新範圍，也絕不允許制度底線被個別案例所穿透。因為一旦破例，整個社區前期建立的公平信任就會瞬間崩解，已簽約的住戶會覺得自己吃虧，尚未決定的人則會得到一個明確的錯誤訊號：拖延有利。</p>
 
-                    <h3>結語：都市更新是一項長期的國家工程</h3>
-                    <p>作為導讀，我希望讀者在翻開這本書時，能將視角拉高。都市更新並不只是建商賺錢的工具，也不僅僅是老屋換新屋的財富遊戲。它深刻地關係到：</p>
-                    <ul class="list-disc pl-8 mb-6">
-                        <li><strong>城市安全：</strong>在地震頻繁的台灣，百萬戶老舊建築是懸在我們頭上的未爆彈。</li>
-                        <li><strong>居住品質：</strong>高齡化社會來臨，缺乏電梯與無障礙設施的老公寓已成為長者的牢籠。</li>
-                        <li><strong>都市競爭力：</strong>破敗的市容與缺乏現代化基礎設施的街廓，將使城市失去吸引人才與投資的能力。</li>
+                    <h4 class="text-xl font-bold text-stone-800 mt-8 mb-4 border-l-4 border-indigo-500 pl-4">品嘉模式：讓合作成為唯一最優解</h4>
+                    <p>若說前半部書在診斷問題，後半部則在建構解方。作者以品嘉建設集團長期積累的整合實踐為基礎，提出了以「透明、公平、紀律、退出」為核心的四大機制，以及支撐整套制度的十二條鐵律。</p>
+                    <ul class="list-disc pl-6 space-y-3 mb-6 text-stone-700">
+                        <li><strong>透明機制：</strong>本質是消滅恐懼。都市更新現場最常見的衝突，往往不是利益的真實差距，而是資訊不對稱所製造的想像鴻溝。將權利變換的計算基準、各戶分配邏輯、選屋排序方式完整公開，讓科學數據取代私下協議，可以從根本瓦解「黑箱作業」的恐懼。</li>
+                        <li><strong>公平機制：</strong>核心原則是「先簽約者不吃虧」。若後續條件因客觀因素調整，已簽約者必須無條件比照適用；支持者的條件永遠不得劣於觀望者。這不僅是道德要求，更是市場訊號的設計——告訴所有人，制度獎勵合作，不獎勵等待。</li>
+                        <li><strong>紀律機制：</strong>整套制度能否成立的最後防線。階段式條件遞減讓拖延產生真實代價；對釘子戶展現「寧可放棄個案或調整範圍，也不破壞規則」的堅定立場，是維護整合公信力的必要代價。</li>
+                        <li><strong>退出機制：</strong>體現了制度的人道精神——承認並非所有人都適合參與重建。提供以屋換屋的實體安置方案，以及依更新前市價的現金退場選項，讓僵局有了一條體面的出路，而不是把所有人困在同一個死結裡直到精疲力竭。</li>
                     </ul>
-                    <p>如果都市更新無法有效推動，城市老化問題將會呈現指數型加劇。因此，都市更新必須被視為一項「國家工程」，而非純粹的市場行為。唯有透過全盤的制度改革、政府的強勢引導以及社會大眾觀念的翻轉，台灣的城市才能持續呼吸、代謝，最終實現真正的重生。</p>
+
+                    <!-- 獨立的結論區塊 -->
+                    <div class="bg-stone-50 border border-stone-200 p-8 mt-12 rounded-xl text-center">
+                        <h4 class="font-bold text-2xl text-teal-900 mb-4">一本關於信任的書</h4>
+                        <p class="text-stone-600 leading-relaxed text-justify mb-6">
+                            《最後10%，決定一切》的書名指向的是整合最後階段的關鍵少數；但讀完全書，你會明白，它真正談論的，始終是一件更根本的事：信任。
+                            <br><br>
+                            對制度的信任，對鄰居的信任，對未來的信任。當這三種信任同時缺席，每一個人做出的個別選擇看似理性，集體的結果卻是整座城市的停滯老化。
+                            <br><br>
+                            台灣即將全面進入「人屋雙老」的歷史交叉點。大量戰後建築同時跨越安全閾值，而高齡化社會的來臨使老屋居民愈發難以承受改建的不確定性。在這個時刻，這本書提供的不只是談判技術或整合策略，而是一套重新設計合作規則的思維框架。它提醒我們：破解釘子戶的關鍵，從來不是更精明的說服術，也不是更豐厚的讓利，而是建立一套讓「合作」成為所有人唯一最優解的制度。
+                        </p>
+                        <div class="inline-block border-t-2 border-amber-400 pt-4 mt-2">
+                            <p class="font-black text-2xl text-stone-800 tracking-wide">城市會前進，但它不會等所有人。</p>
+                        </div>
+                    </div>
                 </article>
             </div>
-        </section>
-
-        <!-- Section 2: In-Depth Breakdown -->
-        <section id="analysis" class="py-20 bg-stone-100 border-t border-stone-200">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-black text-stone-900 mb-4 inline-block relative">
-                        深度剖析與章節重點
-                        <span class="absolute -bottom-2 left-0 w-1/2 h-1 bg-teal-600 rounded"></span>
-                    </h2>
-                    <p class="text-stone-600">
-                        依據本報告的八大核心概念，將深度學理、實務現象分析與對應章節進行條列式彙整。點擊標題即可展開內容，適合進行專題式的深度研讀。
-                    </p>
-                </div>
-
-                <div class="space-y-4" id="accordion-container">
-                    <!-- Javascript will populate accordions here -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 3: Global Comparison -->
-        <section id="global" class="py-20 bg-white border-t border-stone-200">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-black text-stone-900 mb-4 inline-block relative">
-                        跨國借鏡：亞洲四國都更政策評估
-                        <span class="absolute -bottom-2 left-0 w-1/2 h-1 bg-teal-600 rounded"></span>
-                    </h2>
-                    <p class="text-stone-600 max-w-3xl mx-auto">
-                        都市更新法令規定具強烈的時效性與國情差異。本區塊以2026年最新視角，深入分析台灣、日本、新加坡、韓國的都更政策與社會文化差異。利用下方互動圖表與按鈕，探索各國推動都更的優缺點，尋找台灣可學習的先進經驗。
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-                    <!-- Left: Interactive Chart & Controls -->
-                    <div class="bg-stone-50 p-6 rounded-2xl border border-stone-200 shadow-sm">
-                        <div class="flex flex-wrap gap-2 mb-6 justify-center">
-                            <button class="country-btn bg-teal-700 text-white px-4 py-2 rounded-lg font-bold shadow transition-transform hover:scale-105" data-country="tw">🇹🇼 台灣 (Taiwan)</button>
-                            <button class="country-btn bg-white text-stone-600 border border-stone-300 px-4 py-2 rounded-lg font-bold shadow-sm transition-transform hover:scale-105" data-country="jp">🇯🇵 日本 (Japan)</button>
-                            <button class="country-btn bg-white text-stone-600 border border-stone-300 px-4 py-2 rounded-lg font-bold shadow-sm transition-transform hover:scale-105" data-country="sg">🇸🇬 新加坡 (Singapore)</button>
-                            <button class="country-btn bg-white text-stone-600 border border-stone-300 px-4 py-2 rounded-lg font-bold shadow-sm transition-transform hover:scale-105" data-country="kr">🇰🇷 韓國 (S. Korea)</button>
-                        </div>
-                        
-                        <!-- CRITICAL: Chart Container -->
-                        <div class="chart-container">
-                            <canvas id="radarChart"></canvas>
-                        </div>
-                        <p class="text-xs text-center text-stone-500 mt-4">
-                            分數(1-10)代表該國在該維度的展現程度。分數越高代表越強或越完備。<br>
-                            *資料基於2026年各國都市更新相關法規與實務運作之綜合評估。
-                        </p>
-                    </div>
-
-                    <!-- Right: Dynamic Detail Panel -->
-                    <div id="country-detail-panel" class="bg-white p-8 rounded-2xl border border-stone-200 shadow-md h-full">
-                        <!-- Populated by JS -->
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 4: Appendix TOC -->
-        <section id="appendix" class="py-20 bg-stone-900 text-stone-100">
-            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-black text-white mb-4 inline-block relative">
-                        附錄：全書大綱架構
-                        <span class="absolute -bottom-2 left-0 w-1/2 h-1 bg-teal-500 rounded"></span>
-                    </h2>
-                    <p class="text-stone-400">
-                        《破解釘子戶：最後10%，決定一切》全書核心篇章與結構概覽。
-                    </p>
-                </div>
-
-                <div class="bg-stone-800 rounded-xl p-8 border border-stone-700 shadow-xl">
-                    <h3 class="text-xl font-bold text-teal-400 mb-6 border-b border-stone-700 pb-2">《最後 10% ，決定一切》</h3>
-                    <ul class="space-y-2 text-stone-300 text-lg">
-                        <li class="flex flex-col sm:flex-row sm:items-center p-4 bg-stone-900/50 rounded-lg transition-colors hover:bg-stone-700/50">
-                            <span class="font-bold text-copper-500 w-32 shrink-0 tracking-widest text-xl">序章</span>
-                            <span class="text-white font-medium">一個卡住二十年的都更案</span>
-                        </li>
-                        <li class="flex flex-col sm:flex-row sm:items-center p-4 rounded-lg transition-colors hover:bg-stone-700/50">
-                            <span class="font-bold text-copper-500 w-32 shrink-0 tracking-widest text-xl">第一篇</span>
-                            <span class="text-white font-medium">問題與本質（第一部～第五部）</span>
-                        </li>
-                        <li class="flex flex-col sm:flex-row sm:items-center p-4 bg-stone-900/50 rounded-lg transition-colors hover:bg-stone-700/50">
-                            <span class="font-bold text-copper-500 w-32 shrink-0 tracking-widest text-xl">第二篇</span>
-                            <span class="text-white font-medium">驗證與現實（第六部～第七部）</span>
-                        </li>
-                        <li class="flex flex-col sm:flex-row sm:items-center p-4 rounded-lg transition-colors hover:bg-stone-700/50">
-                            <span class="font-bold text-copper-500 w-32 shrink-0 tracking-widest text-xl">第三篇</span>
-                            <span class="text-white font-medium">解法與模型（第八部：品嘉模式）</span>
-                        </li>
-                        <li class="flex flex-col sm:flex-row sm:items-center p-4 bg-stone-900/50 rounded-lg transition-colors hover:bg-stone-700/50">
-                            <span class="font-bold text-copper-500 w-32 shrink-0 tracking-widest text-xl">第四篇</span>
-                            <span class="text-white font-medium">未來與格局（第九部：未來之路）</span>
-                        </li>
-                        <li class="flex flex-col sm:flex-row sm:items-center p-4 rounded-lg transition-colors hover:bg-stone-700/50">
-                            <span class="font-bold text-copper-500 w-32 shrink-0 tracking-widest text-xl">總結</span>
-                            <span class="text-white font-medium">全書總結與核心啟示</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-black text-stone-400 py-8 text-center text-sm">
-        <div class="max-w-7xl mx-auto px-4">
-            <p>&copy; 2026 品嘉建設</p>
         </div>
-    </footer>
+    </section>
 
-    <!-- Application Logic -->
-    <script>
-        // --- Navigation Logic ---
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    window.scrollTo({
-                        top: target.offsetTop - 64, // offset for fixed header
-                        behavior: 'smooth'
-                    });
-                }
-                // Close mobile menu if open
-                document.getElementById('mobile-menu').classList.add('hidden');
-            });
-        });
+    <!-- Section 2: International Comparison (國際視野) -->
+    <section id="global" class="py-20 bg-stone-200 px-4 border-y border-stone-300">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-stone-900 border-b-4 border-amber-500 inline-block pb-2">國際視野：亞洲四國都更政策比較</h2>
+                <p class="mt-4 text-stone-700 max-w-3xl mx-auto">
+                    點擊下方國家標籤，雷達圖將單獨為您展示該國政策的核心數據樣貌。
+                </p>
+            </div>
 
-        // Mobile menu toggle
-        document.getElementById('mobile-menu-btn').addEventListener('click', () => {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        });
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                
+                <div class="bg-white rounded-2xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-center mb-2">各國都更推動維度分析</h3>
+                    <p class="text-sm text-stone-500 text-center mb-4">數值越高代表該國在該維度的表現或依賴程度越強</p>
+                    <div class="chart-container">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
 
-        // Active state for navigation based on scroll position
-        window.addEventListener('scroll', () => {
-            let current = '';
-            const sections = document.querySelectorAll('section');
-            const navLinks = document.querySelectorAll('.nav-link');
-            
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (scrollY >= (sectionTop - 200)) {
-                    current = section.getAttribute('id');
-                }
-            });
+                <div class="bg-white rounded-2xl shadow-lg p-2 md:p-6 h-full flex flex-col">
+                    <div class="flex flex-wrap gap-2 mb-6 border-b border-stone-200 pb-2" id="countryTabs">
+                        <button onclick="switchTab('tw')" class="tab-btn active-tab px-4 py-2 rounded-lg font-bold text-sm bg-teal-700 text-white transition">🇹🇼 台灣</button>
+                        <button onclick="switchTab('sg')" class="tab-btn px-4 py-2 rounded-lg font-bold text-sm bg-stone-100 text-stone-600 hover:bg-stone-200 transition">🇸🇬 新加坡</button>
+                        <button onclick="switchTab('jp')" class="tab-btn px-4 py-2 rounded-lg font-bold text-sm bg-stone-100 text-stone-600 hover:bg-stone-200 transition">🇯🇵 日本</button>
+                        <button onclick="switchTab('kr')" class="tab-btn px-4 py-2 rounded-lg font-bold text-sm bg-stone-100 text-stone-600 hover:bg-stone-200 transition">🇰🇷 韓國</button>
+                    </div>
 
-            navLinks.forEach(link => {
-                link.classList.remove('active');
-                if (link.getAttribute('href').substring(1) === current) {
-                    link.classList.add('active');
-                }
-            });
-        });
+                    <div id="tab-tw" class="tab-content block flex-grow">
+                        <h4 class="text-2xl font-bold text-stone-800 mb-2">台灣：高度產權保護與時效危機</h4>
+                        <div class="space-y-4 text-stone-600 text-sm leading-relaxed">
+                            <p><strong>政策與法令時效：</strong> 台灣以《都市更新條例》與《危老條例》為雙主軸。特別注意，<strong>危老條例的時程容積獎勵具有明確的落日條款（逐年遞減至歸零）</strong>，這對目前的整合實務產生極大的時間壓迫感。此外，自司法院釋字第709號解釋後，正當行政程序被嚴格要求，保障了人權但也大幅拉長了審查時程。</p>
+                            <p><strong>社會人文與地理：</strong> 處於環太平洋地震帶，老屋耐震力不足是迫切的國安危機。華人社會有強烈的「有土斯有財」觀念與家族繼承情感，導致產權複雜。</p>
+                            <p><span class="text-teal-700 font-bold">優勢：</span> 權利變換機制相對公開透明，具備估價師審議機制；對私有財產權的保障達到極致，幾乎杜絕了惡意強拆的流血事件。</p>
+                            <p><span class="text-amber-700 font-bold">劣勢與挑戰：</span> 「1%卡住99%」的困境頻傳。政府對於公權力代拆態度極度保守，導致整合時間成本極高，經常面臨「一坪換一坪」的錯誤期待與高昂造價帶來的共負比攀升問題。</p>
+                        </div>
+                    </div>
 
-        // --- Data Storage: Chapter Analysis (Updated with User Content) ---
-        const chapters = [
-            {
-                title: "1. 老屋危機與高齡社會的垂直監獄",
-                content: `
-                    <div class="space-y-4">
-                        <div class="flex items-start">
-                            <span class="text-teal-700 mr-2 mt-1">📌</span>
-                            <div>
-                                <h4 class="font-bold text-teal-900 mb-1">深度學理與實務分析：</h4>
-                                <p class="text-stone-700 leading-relaxed text-justify">台灣都市正進入大規模老化期，大量建於1970至1990年代的建築缺乏現代耐震設計，構成嚴重公安隱患。同時，無電梯老公寓使高齡長者面臨下樓困難，居住空間異化為「垂直監獄」。<strong>都市更新不僅是資產重組，更是高齡社會的必要解方。</strong></p>
-                            </div>
+                    <div id="tab-sg" class="tab-content hidden flex-grow">
+                        <h4 class="text-2xl font-bold text-stone-800 mb-2">新加坡：強勢國家主導與集體出售</h4>
+                        <div class="space-y-4 text-stone-600 text-sm leading-relaxed">
+                            <p><strong>政策與法令特色：</strong> 擁有獨特的「集體出售」（En Bloc）法規。對於屋齡達 10 年以上的私有公寓，只要取得 80% 區分所有權人同意（依面積與價值計算），即可向政府申請強制出售整宗土地給開發商重新發展，少數不同意者依法必須配合。</p>
+                            <p><strong>社會人文與地理：</strong> 地狹人稠，土地資源極度稀缺。國家掌握極大比例的土地所有權（多數居民居住於政府組屋 HDB），社會普遍接受政府為公共利益進行強勢干預的菁英治理文化。</p>
+                            <p><span class="text-teal-700 font-bold">借鏡優勢：</span> 效率極高，徹底消滅了「釘子戶」利用拖延戰術換取超額暴利的制度誘因。多數決即具備實質的法律強制力，非常值得台灣在檢討「同意門檻」與「退場機制」時參考。</p>
+                            <p><span class="text-amber-700 font-bold">差異與劣勢：</span> 國家機器強大，個人財產的絕對保留權較弱。由於台灣土地多為私有且高度強調民主與個人產權，新加坡模式極難在台灣完全複製，強推容易引發違憲爭議與社會抗爭。</p>
                         </div>
-                        <div class="bg-teal-50 border-l-4 border-teal-600 p-3 rounded-r text-sm text-teal-800 font-medium shadow-sm">
-                            📖 對應章節：第一部 第一章、第二部 第六章
+                    </div>
+
+                    <div id="tab-jp" class="tab-content hidden flex-grow">
+                        <h4 class="text-2xl font-bold text-stone-800 mb-2">日本：細膩的街區營造與共識文化</h4>
+                        <div class="space-y-4 text-stone-600 text-sm leading-relaxed">
+                            <p><strong>政策與法令特色：</strong> 台灣「權利變換」制度的發源地。日本的都市更新（都市再生）高度仰賴如「都市再生機構 (UR)」等半官方/公法人單位主導大型開發案。法令強調「まちづくり」（街區營造），而非單純的建築物重建。</p>
+                            <p><strong>社會人文與地理：</strong> 同樣面臨嚴峻的地震威脅與超高齡化社會。日本社會文化具有極強的「集體主義」、「不給他人添麻煩」的恥感文化，以及對公權力/專業機構的信任感，這使得「惡意勒索型」的釘子戶相對罕見。</p>
+                            <p><span class="text-teal-700 font-bold">借鏡優勢：</span> 前期規劃極度細膩，重視整體社區機能的再造（如防災公園、高齡照護設施）。他們願意花上 10 到 20 年的時間與居民進行「共識建立」（Consensus Building），衝突率極低。</p>
+                            <p><span class="text-amber-700 font-bold">差異與劣勢：</span> 時間成本極端高昂。台灣引進了日本的法規架構，卻缺乏日本的「共識文化」與「集體牽制力」，導致相同的制度在台灣經常陷入無止盡的個人利益談判與司法訴訟中。</p>
                         </div>
-                    </div>`
-            },
-            {
-                title: "2. 都更孤島的空間與時間代價",
-                content: `
-                    <div class="space-y-4">
-                        <div class="flex items-start">
-                            <span class="text-teal-700 mr-2 mt-1">📌</span>
-                            <div>
-                                <h4 class="font-bold text-teal-900 mb-1">深度學理與實務分析：</h4>
-                                <p class="text-stone-700 leading-relaxed text-justify">若少數住戶拒絕參與，最終將被劃出更新範圍，形成被新建大樓包圍的老舊「都更孤島」。這不僅是空間景觀的強烈斷裂，更是<strong>資產價值、居住安全與生活便利性的結構性滑落</strong>。孤島的形成揭示了錯過更新窗口的長期不可逆代價。</p>
-                            </div>
+                    </div>
+
+                    <div id="tab-kr" class="tab-content hidden flex-grow">
+                        <h4 class="text-2xl font-bold text-stone-800 mb-2">韓國：財閥驅動與高強度開發的代價</h4>
+                        <div class="space-y-4 text-stone-600 text-sm leading-relaxed">
+                            <p><strong>政策與法令特色：</strong> 過去高度依賴《都市及住居環境整備法》，由大型財團主導再開發區，給予極高的容積獎勵以快速改變城市天際線。近年來政策轉向，開始推行「都市再生新政」，更注重在地保留與居民參與。</p>
+                            <p><strong>社會人文與地理：</strong> 首都圈人口極度集中。韓國社會性格較為剛烈，過去在推動都更時，財團往往借助法規賦予的強制力甚至灰色地帶手段進行驅離，引發了多次嚴重的流血衝突（如龍山慘案）。</p>
+                            <p><span class="text-teal-700 font-bold">借鏡優勢：</span> 在解決大規模老舊市區窳陋問題上，推進速度與執行魄力驚人，能迅速提升城市的國際競爭力與基礎設施量能。</p>
+                            <p><span class="text-amber-700 font-bold">差異與劣勢：</span> 早期對原住戶（特別是租客與底層弱勢）的安置與保障嚴重不足，導致嚴重的「士紳化」現象與社會階級撕裂。韓國的經驗是台灣最大的警惕：公權力的強制力介入，必須建立在極度完善的配套安置與補償機制之上。</p>
                         </div>
-                        <div class="bg-teal-50 border-l-4 border-teal-600 p-3 rounded-r text-sm text-teal-800 font-medium shadow-sm">
-                            📖 對應章節：第一部 序章、第七部 全章
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Book Deep Dive (深度剖析) -->
+    <section id="analysis" class="py-20 px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-stone-900 border-b-4 border-teal-600 inline-block pb-2">書籍深度剖析重點歸納</h2>
+                <p class="mt-4 text-stone-600">依據《破解釘子戶》報告內容萃取 7 大核心精華，點擊展開查閱。</p>
+            </div>
+
+            <div class="space-y-4" id="accordionContainer">
+                
+                <div class="border border-stone-200 rounded-lg bg-white overflow-hidden shadow-sm">
+                    <button class="w-full px-6 py-4 text-left font-bold text-lg text-stone-800 bg-stone-50 hover:bg-stone-100 flex justify-between items-center transition" onclick="toggleAccordion(1)">
+                        <span>1. 都市更新的本質與高齡社會危機</span>
+                        <span id="icon-1" class="text-teal-600 transition-transform duration-300">&#9660;</span>
+                    </button>
+                    <div id="content-1" class="hidden px-6 py-4 border-t border-stone-200 text-stone-600 leading-relaxed bg-white">
+                        <p><strong>內容：</strong> 指出都市更新不只是建築翻新，更是解決高齡社會「垂直監獄」（無電梯老公寓導致長者無法出門）的關鍵社會政策。老屋老化不僅帶來結構安全（如921地震後的耐震標準落差）風險，更直接導致資產價值的結構性滑落。</p>
+                        <p class="mt-2 text-sm text-teal-800 font-semibold">對應章節： 第一部 第一章、第二部 第三章</p>
+                    </div>
+                </div>
+
+                <div class="border border-stone-200 rounded-lg bg-white overflow-hidden shadow-sm">
+                    <button class="w-full px-6 py-4 text-left font-bold text-lg text-stone-800 bg-stone-50 hover:bg-stone-100 flex justify-between items-center transition" onclick="toggleAccordion(2)">
+                        <span>2. 「一坪換一坪」的都更魔咒與迷思</span>
+                        <span id="icon-2" class="text-teal-600 transition-transform duration-300">&#9660;</span>
+                    </button>
+                    <div id="content-2" class="hidden px-6 py-4 border-t border-stone-200 text-stone-600 leading-relaxed bg-white">
+                        <p><strong>內容：</strong> 深度解析「一坪換一坪」為何在現今環境下是不切實際的幻想。由於碳費開徵、綠建築與防震法規趨嚴、土方處理費暴增等「制度性疊加成本」，導致共同負擔比例（共負比）不斷攀升。錯誤的口號預期直接導致整合停滯，住戶應將焦點從「面積交換」轉向「資產價值提升」。</p>
+                        <p class="mt-2 text-sm text-teal-800 font-semibold">對應章節： 第二部 第一章、第二部 第二章</p>
+                    </div>
+                </div>
+
+                <div class="border border-stone-200 rounded-lg bg-white overflow-hidden shadow-sm">
+                    <button class="w-full px-6 py-4 text-left font-bold text-lg text-stone-800 bg-stone-50 hover:bg-stone-100 flex justify-between items-center transition" onclick="toggleAccordion(3)">
+                        <span>3. 釘子戶的十種心理原型與光譜</span>
+                        <span id="icon-3" class="text-teal-600 transition-transform duration-300">&#9660;</span>
+                    </button>
+                    <div id="content-3" class="hidden px-6 py-4 border-t border-stone-200 text-stone-600 leading-relaxed bg-white">
+                        <p><strong>內容：</strong> 將釘子戶去標籤化，細分為十種心理原型：恐懼型、情感型、資訊不足型、公平敏感型、投機型、不信任型、利益最大化型、沉默型、家庭分裂型、原則對抗型。強調整合必須先具備「診斷能力」，針對處於理性、情感或利益不同光譜的住戶，施以不同的整合策略。</p>
+                        <p class="mt-2 text-sm text-teal-800 font-semibold">對應章節： 第三部 第一章、第三部 第五章</p>
+                    </div>
+                </div>
+
+                <div class="border border-stone-200 rounded-lg bg-white overflow-hidden shadow-sm">
+                    <button class="w-full px-6 py-4 text-left font-bold text-lg text-stone-800 bg-stone-50 hover:bg-stone-100 flex justify-between items-center transition" onclick="toggleAccordion(4)">
+                        <span>4. 80%陷阱與95%突破定律</span>
+                        <span id="icon-4" class="text-teal-600 transition-transform duration-300">&#9660;</span>
+                    </button>
+                    <div id="content-4" class="hidden px-6 py-4 border-t border-stone-200 text-stone-600 leading-relaxed bg-white">
+                        <p><strong>內容：</strong> 揭示都市整合過程中的心理博弈轉換。當同意比例達80%時，未簽約者意識到自身為「關鍵少數」，心態由參與決策轉為利益博弈，引發「最後一戶幻想」與整合停滯。而當比例突破95%時，局勢產生質變，剩餘住戶面臨被制度排除的強烈壓力，從而促成最終共識。</p>
+                        <p class="mt-2 text-sm text-teal-800 font-semibold">對應章節： 第三部 第二章、第三部 第四章</p>
+                    </div>
+                </div>
+
+                <div class="border border-stone-200 rounded-lg bg-white overflow-hidden shadow-sm">
+                    <button class="w-full px-6 py-4 text-left font-bold text-lg text-stone-800 bg-stone-50 hover:bg-stone-100 flex justify-between items-center transition" onclick="toggleAccordion(5)">
+                        <span>5. 都更孤島的形成與時間斷層</span>
+                        <span id="icon-5" class="text-teal-600 transition-transform duration-300">&#9660;</span>
+                    </button>
+                    <div id="content-5" class="hidden px-6 py-4 border-t border-stone-200 text-stone-600 leading-relaxed bg-white">
+                        <p><strong>內容：</strong> 探討少數住戶因拖延、誤判籌碼、家庭決策失衡或制度節點錯失，最終被劃出更新範圍的過程。孤島在城市空間中形成強烈的「時間斷層」，不僅承擔嚴重的安全與生活品質代價，更徹底喪失了未來資產發展的選擇權。</p>
+                        <p class="mt-2 text-sm text-teal-800 font-semibold">對應章節： 第七部 第一章至第五章</p>
+                    </div>
+                </div>
+
+                <div class="border border-stone-200 rounded-lg bg-white overflow-hidden shadow-sm">
+                    <button class="w-full px-6 py-4 text-left font-bold text-lg text-stone-800 bg-stone-50 hover:bg-stone-100 flex justify-between items-center transition" onclick="toggleAccordion(6)">
+                        <span>6. 品嘉模式：四大整合機制與十二條鐵律</span>
+                        <span id="icon-6" class="text-teal-600 transition-transform duration-300">&#9660;</span>
+                    </button>
+                    <div id="content-6" class="hidden px-6 py-4 border-t border-stone-200 text-stone-600 leading-relaxed bg-white">
+                        <p><strong>內容：</strong> 提出破解困局的結構性解方。四大機制為：透明、公平、紀律、退出。為落實此四大機制，品嘉模式嚴格執行以下<strong>「十二條鐵律」</strong>：</p>
+                        <ul class="list-decimal pl-6 mt-3 space-y-2 text-sm text-stone-700">
+                            <li><strong>鐵律一（資訊全公開）：</strong> 所有的估價報告、分配比例與合約條款必須對所有住戶公開，絕無黑箱作業。</li>
+                            <li><strong>鐵律二（拒絕私下協議）：</strong> 絕不與任何單一住戶簽訂保密協定或私下讓利，徹底杜絕「會吵的小孩有糖吃」的惡習。</li>
+                            <li><strong>鐵律三（先簽約者絕對保障）：</strong> 承諾「先簽約者絕不吃虧」，若後續因客觀因素有整體條件的優化，已簽約者無條件溯及適用。</li>
+                            <li><strong>鐵律四（條件階段式遞減）：</strong> 隨著整合進度推進（如報核前後），給予的獎勵條件必須階梯式遞減，讓拖延產生真實成本。</li>
+                            <li><strong>鐵律五（支持者優於反對者）：</strong> 配合都更的同意戶，其最終獲得的條件與選擇權，必須嚴格優於最後一刻才妥協的住戶。</li>
+                            <li><strong>鐵律六（第三方客觀估價）：</strong> 價值分配完全交由國家認證的專業估價師評定，建商絕不介入個別住戶的價值談判。</li>
+                            <li><strong>鐵律七（絕不妥協底線）：</strong> 面對提出極端、不合理要求的釘子戶，實施者必須展現寧可破局也絕不妥協的堅定意志。</li>
+                            <li><strong>鐵律八（適時啟動切割機制）：</strong> 當釘子戶確實無法溝通且危害全體公共利益時，應果斷將其劃出更新單元，讓其成為都更孤島。</li>
+                            <li><strong>鐵律九（實體安置退場）：</strong> 針對高齡或懼怕搬遷的弱勢住戶，主動提供「以屋換屋」的現成房屋安置方案。</li>
+                            <li><strong>鐵律十（現金買斷退場）：</strong> 針對純粹不想參與改建的住戶，提供依據更新前合理市價的「現金收購」方案，讓其提前下車。</li>
+                            <li><strong>鐵律十一（公權力代拆準備）：</strong> 在窮盡一切合法、合情、合理的協調程序後，實施者必須勇於承擔，依法申請政府代為強制拆除。</li>
+                            <li><strong>鐵律十二（信譽大於單一利潤）：</strong> 將維護這套制度的「公信力」與「信任基礎」置於單一建案的利潤之上，以此建立長期的社會信任。</li>
+                        </ul>
+                        <p class="mt-4 text-sm text-teal-800 font-semibold">對應章節： 第八部 第二章、第八部 第四章</p>
+                    </div>
+                </div>
+
+                <div class="border border-stone-200 rounded-lg bg-white overflow-hidden shadow-sm">
+                    <button class="w-full px-6 py-4 text-left font-bold text-lg text-stone-800 bg-stone-50 hover:bg-stone-100 flex justify-between items-center transition" onclick="toggleAccordion(7)">
+                        <span>7. 從談判制度轉向標準制度的未來改革</span>
+                        <span id="icon-7" class="text-teal-600 transition-transform duration-300">&#9660;</span>
+                    </button>
+                    <div id="content-7" class="hidden px-6 py-4 border-t border-stone-200 text-stone-600 leading-relaxed bg-white">
+                        <p><strong>內容：</strong> 將都市更新定位為「時間競賽」。呼籲政府政策應導入「時間成本」與「制度不可逆性」，降低個別談判空間，提升分回機制的標準化。將都市更新從房地產層次拉升至反映國家集體決策能力的「城市治理問題」。</p>
+                        <p class="mt-2 text-sm text-teal-800 font-semibold">對應章節： 第九部 第四章、第九部 第五章</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Appendix & Practical Q&A (實務附錄) -->
+    <section id="appendix" class="py-20 bg-stone-100 px-4 border-t border-stone-300">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-stone-900 border-b-4 border-amber-500 inline-block pb-2">實務附錄摘要與全書目錄</h2>
+                <p class="mt-4 text-stone-600">從地主最關心的權益問題，到整合失敗的真實血淚案例，為您一次解答。</p>
+            </div>
+
+            <div class="flex justify-center mb-8 space-x-4">
+                <button class="px-5 py-2 rounded-full bg-stone-800 text-white text-sm font-semibold shadow filter-btn" data-filter="all">全部顯示</button>
+                <button class="px-5 py-2 rounded-full bg-white text-stone-600 border border-stone-300 hover:bg-stone-50 text-sm font-semibold transition filter-btn" data-filter="qa">常見 Q&A</button>
+                <button class="px-5 py-2 rounded-full bg-white text-stone-600 border border-stone-300 hover:bg-stone-50 text-sm font-semibold transition filter-btn" data-filter="case">案例解析</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16" id="qaGrid">
+                
+                <!-- Q&A 1 -->
+                <div class="qa-card p-6 bg-white rounded-xl shadow-sm border border-stone-200" data-category="qa">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-teal-100 text-teal-800 text-xs font-bold px-2 py-1 rounded mr-2">理性提問</span>
+                        <h3 class="font-bold text-base">Q1：都更後的坪數是怎麼算出來的？</h3>
+                    </div>
+                    <p class="text-stone-600 text-sm leading-relaxed mt-2">
+                        A：主要是透過「權利變換」制度。政府規定須由三家專業估價師評定更新前後的價值，並經過政府審議會審查。建議地主可查閱「事業計畫書」中的分配比例，或要求實施者提供詳細的「試算表」。
+                    </p>
+                </div>
+
+                <!-- Q&A 2 -->
+                <div class="qa-card p-6 bg-white rounded-xl shadow-sm border border-stone-200" data-category="qa">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-amber-100 text-amber-800 text-xs font-bold px-2 py-1 rounded mr-2">風險疑慮</span>
+                        <h3 class="font-bold text-base">Q2：如果建商蓋到一半倒閉怎麼辦？</h3>
+                    </div>
+                    <p class="text-stone-600 text-sm leading-relaxed mt-2">
+                        A：現在多數都更案會嚴格要求建立「信託機制」。土地產權與興建資金會統一放在銀行專戶控管，專款專用。就算建商財務出問題，信託銀行仍會啟動「續建機制」尋找接手團隊，保障地主拿回房子的權利。
+                    </p>
+                </div>
+
+                <!-- Q&A 3 -->
+                <div class="qa-card p-6 bg-white rounded-xl shadow-sm border border-stone-200" data-category="qa">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-1 rounded mr-2">制度選擇</span>
+                        <h3 class="font-bold text-base">Q3：「協議合建」與「權利變換」差在哪？</h3>
+                    </div>
+                    <p class="text-stone-600 text-sm leading-relaxed mt-2">
+                        A：「協議合建」是地主與建商私下談判，政府不介入條件，可能產生早簽晚簽條件不一的黑箱；「權利變換」則有法規強制規範與政府審查。對於缺乏互信的社區，選擇權利變換較有公信力保障。
+                    </p>
+                </div>
+
+                <!-- Q&A 4 -->
+                <div class="qa-card p-6 bg-white rounded-xl shadow-sm border border-stone-200" data-category="qa">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-stone-200 text-stone-800 text-xs font-bold px-2 py-1 rounded mr-2">時間成本</span>
+                        <h3 class="font-bold text-base">Q4：一個都更案到底要花多少時間？</h3>
+                    </div>
+                    <p class="text-stone-600 text-sm leading-relaxed mt-2">
+                        A：都更可分為三大階段：1. 整合期（短則2年，長則數十年，取決於住戶共識）、2. 審議期（政府審查事業計畫與權變，約2-3年）、3. 施工期（約3-4年）。因此，若整合順利，最快約需 7-8 年才能歡喜入厝。
+                    </p>
+                </div>
+
+                <!-- Q&A 5 -->
+                <div class="qa-card p-6 bg-white rounded-xl shadow-sm border border-stone-200" data-category="qa">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-rose-100 text-rose-800 text-xs font-bold px-2 py-1 rounded mr-2">價值迷思</span>
+                        <h3 class="font-bold text-base">Q5：老公寓的一樓和頂樓加蓋，能分比較多嗎？</h3>
+                    </div>
+                    <p class="text-stone-600 text-sm leading-relaxed mt-2">
+                        A：一樓通常具備商業效益，估價師會給予較高評定價值，因此換算權利價值時確實會比樓上戶多。但「頂樓加蓋」屬違建，在法規與權變制度中是不計入合法面積分配的，僅會視情況給予微薄的拆遷補償費。
+                    </p>
+                </div>
+
+                <!-- Q&A 6 -->
+                <div class="qa-card p-6 bg-white rounded-xl shadow-sm border border-stone-200" data-category="qa">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-2 py-1 rounded mr-2">資金疑慮</span>
+                        <h3 class="font-bold text-base">Q6：什麼是「共同負擔」？地主要出錢嗎？</h3>
+                    </div>
+                    <p class="text-stone-600 text-sm leading-relaxed mt-2">
+                        A：都更不需要地主拿現金出來蓋房子。建商代墊的營造費、設計費、信託費等總成本稱為「共同負擔」。建商會分回一部分蓋好的新房子（抵付房地）來折抵這些成本，這也是為什麼無法「一坪換一坪」的主要原因。
+                    </p>
+                </div>
+
+                <!-- Q&A 7 -->
+                <div class="qa-card p-6 bg-white rounded-xl shadow-sm border border-stone-200" data-category="qa">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-orange-100 text-orange-800 text-xs font-bold px-2 py-1 rounded mr-2">生活配套</span>
+                        <h3 class="font-bold text-base">Q7：房子拆掉施工期間，租屋費怎麼辦？</h3>
+                    </div>
+                    <p class="text-stone-600 text-sm leading-relaxed mt-2">
+                        A：在合法權利變換計畫中，實施者（建商）必須編列「租金補貼（安置費）」。從交屋拆除那一刻起，直到新屋蓋好交屋為止，會按月或按期發放給地主，確保地主在施工期間的居住生活不受影響。
+                    </p>
+                </div>
+
+                <!-- Q&A 8 -->
+                <div class="qa-card p-6 bg-white rounded-xl shadow-sm border border-stone-200" data-category="qa">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-red-100 text-red-800 text-xs font-bold px-2 py-1 rounded mr-2">極端狀況</span>
+                        <h3 class="font-bold text-base">Q8：不同意戶可以堅持到底不拆嗎？</h3>
+                    </div>
+                    <p class="text-stone-600 text-sm leading-relaxed mt-2">
+                        A：在《都市更新條例》規範下，當計畫經多數決通過並經市府核定後，對於少數仍無法達成協議的住戶，實施者在完成嚴謹的協調程序後，得依法申請政府進行「代為拆除」（公權力介入），以保障多數人的公共安全利益。
+                    </p>
+                </div>
+
+                <!-- Q&A 9 -->
+                <div class="qa-card p-6 bg-white rounded-xl shadow-sm border border-stone-200" data-category="qa">
+                    <div class="flex items-center mb-3">
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2 py-1 rounded mr-2">品嘉模式</span>
+                        <h3 class="font-bold text-base">Q9：品嘉模式提到的「退出機制」是什麼？</h3>
+                    </div>
+                    <p class="text-stone-600 text-sm leading-relaxed mt-2">
+                        A：並非所有人都能承受都更的變動期。退出機制是給予不想參與重建的產權人一條明路：可以選擇依據更新前的市價由實施者「現金買斷」退場，或是替高齡長者安排「以屋換屋」實體安置，避免整個社區卡死。
+                    </p>
+                </div>
+
+                <!-- Case 1 -->
+                <div class="qa-card p-6 bg-stone-50 rounded-xl shadow-md border border-stone-300 relative overflow-hidden" data-category="case">
+                    <div class="absolute top-0 right-0 bg-stone-800 text-white text-xs px-3 py-1 rounded-bl-lg">案例 14</div>
+                    <h3 class="font-bold text-base mb-2 text-stone-800 mt-2">情感與家族記憶的糾葛 (北投石牌)</h3>
+                    <div class="text-stone-600 text-sm leading-relaxed space-y-2">
+                        <p><strong>背景：</strong>住戶在原屋成長，父母也在此居住一生，房子承載完整家族歷史。</p>
+                        <p><strong>衝突：</strong>理性上明白改建安全，但感性上認為一旦拆除家族記憶就被切斷，無法用金錢補償。</p>
+                        <p><strong>結果：</strong>團隊多次溝通仍無效，最終該舊屋被劃出更新範圍，保留在新建街廓中成為突兀的孤島。</p>
+                    </div>
+                </div>
+
+                <!-- Case 2 -->
+                <div class="qa-card p-6 bg-stone-50 rounded-xl shadow-md border border-stone-300 relative overflow-hidden" data-category="case">
+                    <div class="absolute top-0 right-0 bg-stone-800 text-white text-xs px-3 py-1 rounded-bl-lg">附錄案例</div>
+                    <h3 class="font-bold text-base mb-2 text-stone-800 mt-2">錯失時機的「遲疑者」</h3>
+                    <div class="text-stone-600 text-sm leading-relaxed space-y-2">
+                        <p><strong>問題：</strong>這類住戶最大的問題不是強烈反對，而是無法在集體節奏中做出決定，以為「還沒拒絕就還有時間」。</p>
+                        <p><strong>轉折：</strong>等到最終願意加入時，更新案已進入法定報核程序。若重新納入將導致全案重走程序與成本暴增，遭實施者拒絕。</p>
+                        <p><strong>啟示：</strong>在都更裡，「遲疑」本身就是一種決策。錯過時點往往比一開始明確反對更難補救。</p>
+                    </div>
+                </div>
+
+                <!-- Case 3 -->
+                <div class="qa-card p-6 bg-stone-50 rounded-xl shadow-md border border-stone-300 relative overflow-hidden" data-category="case">
+                    <div class="absolute top-0 right-0 bg-stone-800 text-white text-xs px-3 py-1 rounded-bl-lg">深度剖析</div>
+                    <h3 class="font-bold text-base mb-2 text-stone-800 mt-2">80%陷阱與「最後一戶」幻想</h3>
+                    <div class="text-stone-600 text-sm leading-relaxed space-y-2">
+                        <p><strong>現象：</strong>在整合初期大家都在談法規，但當同意比例達 80% 門檻時，剩下的住戶心態會瞬間轉變為利益博弈。</p>
+                        <p><strong>迷思：</strong>未簽約者會誤以為自己是「關鍵少數」，擁有絕對否決權，進而提出天價條件要求超額讓利。</p>
+                        <p><strong>代價：</strong>這種極致的個體理性，最終將導致實施者不堪負荷而撤案，讓整個社區苦等十年的心血全盤皆輸。</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 全書目錄區塊 -->
+            <div class="bg-white rounded-2xl shadow-md border border-stone-200 overflow-hidden max-w-5xl mx-auto">
+                <div class="bg-stone-800 text-stone-50 py-4 px-6">
+                    <h3 class="text-xl font-bold">附錄：《最後10%，決定一切：破解釘子戶，解開都市更新的關鍵密碼》全書目錄</h3>
+                </div>
+                <div class="p-6 md:p-10">
+                    <div class="space-y-6 text-sm md:text-base text-stone-700">
+                        
+                        <div>
+                            <ul class="list-none space-y-1 font-semibold">
+                                <li>● 推薦序（一） 都市更新的真正難題／陳振川</li>
+                                <li>● 推薦序（二） 當城市老去，我們要怎麼辦？／徐秀蘭</li>
+                                <li>● 推薦序（三） 當我們這一代，開始理解「家」的真正意義／胡可昕</li>
+                                <li>● 作者序 為什麼我要寫這本書？</li>
+                                <li>● 【序章】 一個卡住二十年的都更案</li>
+                            </ul>
                         </div>
-                    </div>`
-            },
-            {
-                title: "3. 80%陷阱與最後一戶的利益幻想",
-                content: `
-                    <div class="space-y-4">
-                        <div class="flex items-start">
-                            <span class="text-teal-700 mr-2 mt-1">📌</span>
-                            <div>
-                                <h4 class="font-bold text-teal-900 mb-1">深度學理與實務分析：</h4>
-                                <p class="text-stone-700 leading-relaxed text-justify">整合初期的阻力通常來自資訊不足與恐懼；當同意比例逼近80%時，案件往往陷入停滯，此即「80%陷阱」。剩餘住戶意識到自身位置的關鍵性，產生<strong>「最後一戶幻想」</strong>，誤信撐到最後能獲最高籌碼。個體理性最終導致集體停滯。</p>
-                            </div>
-                        </div>
-                        <div class="bg-teal-50 border-l-4 border-teal-600 p-3 rounded-r text-sm text-teal-800 font-medium shadow-sm">
-                            📖 對應章節：第一部 第二章、第三部 第二章及第三章
-                        </div>
-                    </div>`
-            },
-            {
-                title: "4. 95%突破定律與心理定錨轉化",
-                content: `
-                    <div class="space-y-4">
-                        <div class="flex items-start">
-                            <span class="text-teal-700 mr-2 mt-1">📌</span>
-                            <div>
-                                <h4 class="font-bold text-teal-900 mb-1">深度學理與實務分析：</h4>
-                                <p class="text-stone-700 leading-relaxed text-justify">當同意比例達到95%的臨界點時，社區局勢將產生質變。剩餘的不同意戶會面臨強烈的社區共識壓力、選擇空間壓縮以及時間成本的逼近。<strong>多數人的主觀決策已形成客觀現實</strong>，迫使觀望者認知到時間不再站在他們那邊，進而促成突破。</p>
-                            </div>
-                        </div>
-                        <div class="bg-teal-50 border-l-4 border-teal-600 p-3 rounded-r text-sm text-teal-800 font-medium shadow-sm">
-                            📖 對應章節：第三部 第四章
-                        </div>
-                    </div>`
-            },
-            {
-                title: "5. 釘子戶心理光譜與制度歸因",
-                content: `
-                    <div class="space-y-4">
-                        <div class="flex items-start">
-                            <span class="text-teal-700 mr-2 mt-1">📌</span>
-                            <div>
-                                <h4 class="font-bold text-teal-900 mb-1">深度學理與實務分析：</h4>
-                                <p class="text-stone-700 leading-relaxed text-justify">釘子戶並非單一類型，其心理光譜涵蓋：理性阻力（資訊不足）、情感阻力（記憶依附）、利益阻力（相對公平感受損與投機）及立場阻力。制度若缺乏明確規則或容許個別加碼，將激發<strong>「損失厭惡」與「比較心理」</strong>，從而「製造」出釘子戶。</p>
-                            </div>
-                        </div>
-                        <div class="bg-teal-50 border-l-4 border-teal-600 p-3 rounded-r text-sm text-teal-800 font-medium shadow-sm">
-                            📖 對應章節：第三部 第一章及第五章、第四部 第三章
-                        </div>
-                    </div>`
-            },
-            {
-                title: "6. 品嘉模式與四大整合機制",
-                content: `
-                    <div class="space-y-4">
-                        <div class="flex items-start">
-                            <span class="text-teal-700 mr-2 mt-1">📌</span>
-                            <div>
-                                <h4 class="font-bold text-teal-900 mb-1">深度學理與實務分析：</h4>
-                                <p class="text-stone-700 leading-relaxed text-justify">為破解制度困境，書中提出四大機制：<br>
-                                1. <strong>「透明」機制</strong>（分回與估價絕對公開）<br>
-                                2. <strong>「公平」機制</strong>（確保早簽約者條件最優）<br>
-                                3. <strong>「紀律」機制</strong>（條件隨時間遞減，絕不對最後一戶無底線讓步）<br>
-                                4. <strong>「退出」機制</strong>（提供以屋換屋或現金退場，化解死結）。</p>
-                            </div>
-                        </div>
-                        <div class="bg-teal-50 border-l-4 border-teal-600 p-3 rounded-r text-sm text-teal-800 font-medium shadow-sm">
-                            📖 對應章節：第八部 第一至四章
-                        </div>
-                    </div>`
-            },
-            {
-                title: "7. 一坪換一坪的迷思與造價疊加剖析",
-                content: `
-                    <div class="space-y-4">
-                        <div class="flex items-start">
-                            <span class="text-teal-700 mr-2 mt-1">📌</span>
-                            <div>
-                                <h4 class="font-bold text-teal-900 mb-1">深度學理與實務分析：</h4>
-                                <p class="text-stone-700 leading-relaxed text-justify">住戶堅持「一坪換一坪」往往是錯誤的比較基礎。在當前碳費徵收、綠建築要求、缺工缺料及土方處理成本等<strong>「制度性疊加」</strong>下，營建成本暴增，共同負擔比例大幅提高。堅持不切實際的面積條件，只會導致全案停滯與資產持續貶值。</p>
-                            </div>
-                        </div>
-                        <div class="bg-teal-50 border-l-4 border-teal-600 p-3 rounded-r text-sm text-teal-800 font-medium shadow-sm">
-                            📖 對應章節：第二部 第一章及第二章
-                        </div>
-                    </div>`
-            },
-            {
-                title: "8. 都市更新十二條鐵律",
-                content: `
-                    <div class="space-y-4">
-                        <div class="flex items-start">
-                            <span class="text-teal-700 mr-2 mt-1">📌</span>
-                            <div class="w-full">
-                                <h4 class="font-bold text-teal-900 mb-2">深度學理與實務分析：</h4>
-                                <p class="text-stone-700 leading-relaxed text-justify mb-5">從實務淬鍊的指導原則，核心精神在於以制度取代無止境的個別談判，重建社會信任基礎。完整十二條鐵律如下：</p>
-                                
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2">
-                                    <div class="flex items-center bg-white p-3 border border-stone-200 rounded-lg shadow-sm hover:border-teal-300 transition-colors">
-                                        <span class="w-6 h-6 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center text-xs font-bold mr-3 shrink-0">1</span>
-                                        <span class="text-stone-800 text-sm font-medium">所有關鍵資訊必須透明</span>
-                                    </div>
-                                    <div class="flex items-center bg-white p-3 border border-stone-200 rounded-lg shadow-sm hover:border-teal-300 transition-colors">
-                                        <span class="w-6 h-6 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center text-xs font-bold mr-3 shrink-0">2</span>
-                                        <span class="text-stone-800 text-sm font-medium">分回制度必須公平一致</span>
-                                    </div>
-                                    <div class="flex items-center bg-white p-3 border border-stone-200 rounded-lg shadow-sm hover:border-teal-300 transition-colors">
-                                        <span class="w-6 h-6 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center text-xs font-bold mr-3 shrink-0">3</span>
-                                        <span class="text-stone-800 text-sm font-medium">先簽約者不能吃虧</span>
-                                    </div>
-                                    <div class="flex items-center bg-white p-3 border border-stone-200 rounded-lg shadow-sm hover:border-teal-300 transition-colors">
-                                        <span class="w-6 h-6 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center text-xs font-bold mr-3 shrink-0">4</span>
-                                        <span class="text-stone-800 text-sm font-medium">拖延不能成為策略</span>
-                                    </div>
-                                    <div class="flex items-center bg-white p-3 border border-stone-200 rounded-lg shadow-sm hover:border-teal-300 transition-colors">
-                                        <span class="w-6 h-6 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center text-xs font-bold mr-3 shrink-0">5</span>
-                                        <span class="text-stone-800 text-sm font-medium">支持者必須受到保障</span>
-                                    </div>
-                                    <div class="flex items-center bg-white p-3 border border-stone-200 rounded-lg shadow-sm hover:border-teal-300 transition-colors">
-                                        <span class="w-6 h-6 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center text-xs font-bold mr-3 shrink-0">6</span>
-                                        <span class="text-stone-800 text-sm font-medium">不可破壞整合紀律</span>
-                                    </div>
-                                    <div class="flex items-center bg-white p-3 border border-stone-200 rounded-lg shadow-sm hover:border-teal-300 transition-colors">
-                                        <span class="w-6 h-6 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center text-xs font-bold mr-3 shrink-0">7</span>
-                                        <span class="text-stone-800 text-sm font-medium">必須建立退出機制</span>
-                                    </div>
-                                    <div class="flex items-center bg-white p-3 border border-stone-200 rounded-lg shadow-sm hover:border-teal-300 transition-colors">
-                                        <span class="w-6 h-6 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center text-xs font-bold mr-3 shrink-0">8</span>
-                                        <span class="text-stone-800 text-sm font-medium">年長住戶需要特殊方案</span>
-                                    </div>
-                                    <div class="flex items-center bg-white p-3 border border-stone-200 rounded-lg shadow-sm hover:border-teal-300 transition-colors">
-                                        <span class="w-6 h-6 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center text-xs font-bold mr-3 shrink-0">9</span>
-                                        <span class="text-stone-800 text-sm font-medium">多數共識比個別談判更重要</span>
-                                    </div>
-                                    <div class="flex items-center bg-white p-3 border border-stone-200 rounded-lg shadow-sm hover:border-teal-300 transition-colors">
-                                        <span class="w-6 h-6 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center text-xs font-bold mr-3 shrink-0">10</span>
-                                        <span class="text-stone-800 text-sm font-medium">社區信任是整合基礎</span>
-                                    </div>
-                                    <div class="flex items-center bg-white p-3 border border-stone-200 rounded-lg shadow-sm hover:border-teal-300 transition-colors">
-                                        <span class="w-6 h-6 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center text-xs font-bold mr-3 shrink-0">11</span>
-                                        <span class="text-stone-800 text-sm font-medium">政府制度必須支持整合</span>
-                                    </div>
-                                    <div class="flex items-center bg-white p-3 border border-stone-200 rounded-lg shadow-sm hover:border-teal-300 transition-colors">
-                                        <span class="w-6 h-6 rounded-full bg-teal-100 text-teal-800 flex items-center justify-center text-xs font-bold mr-3 shrink-0">12</span>
-                                        <span class="text-stone-800 text-sm font-medium">都市更新是一場長期工程</span>
-                                    </div>
+
+                        <div>
+                            <h4 class="font-bold text-lg text-teal-800 mb-2 border-b border-stone-200 pb-1">第一篇｜問題與本質</h4>
+                            <div class="ml-4 space-y-4">
+                                <div>
+                                    <p class="font-bold text-stone-800">● 第一部｜台灣正在進入老屋重建時代─「問題不是會不會發生，而是已經發生」</p>
+                                    <ul class="list-circle pl-6 mt-1 space-y-1 text-stone-600">
+                                        <li>○ 第一章｜一棟老房子，為什麼可以拖住整個城市？</li>
+                                        <li>○ 第二章｜都更最大的敵人，不是法規，而是人性</li>
+                                        <li>○ 第三章｜為什麼80%同意，還是做不成？</li>
+                                        <li>○ 第四章｜最後一戶，為什麼變成關鍵？</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-stone-800">● 第二部｜你一定要知道的都更知識</p>
+                                    <ul class="list-circle pl-6 mt-1 space-y-1 text-stone-600">
+                                        <li>○ 第一章｜「一坪換一坪」的都更魔咒是都更成功的最大阻力</li>
+                                        <li>○ 第二章｜時間正使得改建後地主的分回比例越來越少</li>
+                                        <li>○ 第三章｜老屋若不能改建價值將日益滑落</li>
+                                        <li>○ 第四章｜為什麼案量越多的都更平台公司反而越安全，更不容易出現爛尾樓現象？</li>
+                                        <li>○ 第五章｜都更沒有你想像的那麼簡單：一個只有2%成功率的制度，如何面對台北老屋危機？</li>
+                                        <li>○ 第六章｜釘子戶沒有想到的三個真相——為什麼反對都市更新，往往是在傷害自己</li>
+                                        <li>○ 第七章｜當前的都更市場已經出現主客易位的新局面</li>
+                                        <li>○ 第八章｜都更不是一定會來，你可能這輩子只遇到一次</li>
+                                        <li>○ 第九章｜為什麼很多人等一等，最後什麼都沒有？</li>
+                                        <li>○ 第十章｜都更孤島：當別人都變新，你卻被留下來</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-stone-800">● 第三部｜釘子戶現象：反對，究竟是怎麼形成的－反對，從來不是表面上的理由</p>
+                                    <ul class="list-circle pl-6 mt-1 space-y-1 text-stone-600">
+                                        <li>○ 第一章｜釘子戶究竟是誰？（釘子戶十種類型總覽）</li>
+                                        <li>○ 第二章｜80%陷阱：整合為何卡在最後階段</li>
+                                        <li>○ 第三章｜最後一戶幻想</li>
+                                        <li>○ 第四章｜95%突破定律</li>
+                                        <li>○ 第五章｜釘子戶心理光譜</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-stone-800">● 第四部｜人性與制度——釘子戶問題的真正根源：為什麼都市更新會失敗</p>
+                                    <ul class="list-circle pl-6 mt-1 space-y-1 text-stone-600">
+                                        <li>○ 第一章｜都市更新是一場集體行動困境</li>
+                                        <li>○ 第二章｜囚徒困境：理性選擇如何導致最差結果</li>
+                                        <li>○ 第三章｜制度如何「製造」釘子戶</li>
+                                        <li>○ 第四章｜為什麼條件越好，反而越難談？</li>
+                                        <li>○ 第五章｜最後一戶，是制度的必然結果</li>
+                                        <li>○ 第六章｜80%陷阱：整合為什麼會卡住</li>
+                                        <li>○ 第七章｜95%定律：為什麼局勢會突然改變</li>
+                                        <li>○ 第八章｜真正的破解關鍵：不是說服人，而是改變制度</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-stone-800">● 第五部｜經典案例：台灣都更的衝突、教訓與啟示</p>
+                                    <ul class="list-circle pl-6 mt-1 space-y-1 text-stone-600">
+                                        <li>○ 第一章｜文林苑：當制度跑在社會共識之前</li>
+                                        <li>○ 第二章｜永春都更：釘子戶的長期戰</li>
+                                        <li>○ 第三章｜正義國宅：成功與代價並存的典範</li>
+                                        <li>○ 第四章｜從三大案例看釘子戶的本質</li>
+                                        <li>○ 第五章｜都市更新最大的誤解：把問題歸咎於少數人</li>
+                                        <li>○ 第六章｜案例的真正價值：不是記住，而是理解</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
-                        <div class="bg-teal-50 border-l-4 border-teal-600 p-3 rounded-r text-sm text-teal-800 font-medium shadow-sm mt-4">
-                            📖 對應章節：第八部 第四章及第五章
-                        </div>
-                    </div>`
-            }
-        ];
 
-        // Populate Accordion
-        const accordionContainer = document.getElementById('accordion-container');
-        chapters.forEach((chap, index) => {
-            const itemHtml = `
-                <div class="bg-white border border-stone-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                    <button class="accordion-btn w-full text-left px-6 py-4 bg-white flex justify-between items-center focus:outline-none" onclick="toggleAccordion(${index})">
-                        <span class="font-bold text-lg text-teal-900">${chap.title}</span>
-                        <span class="text-2xl text-stone-400 transition-transform duration-300" id="icon-${index}">+</span>
-                    </button>
-                    <div class="accordion-content px-6 bg-stone-50 border-t border-stone-100" id="content-${index}">
-                        <div class="py-6">
-                            ${chap.content}
+                        <div>
+                            <h4 class="font-bold text-lg text-teal-800 mb-2 border-b border-stone-200 pb-1 mt-6">第二篇｜驗證與現實</h4>
+                            <div class="ml-4 space-y-4">
+                                <div>
+                                    <p class="font-bold text-stone-800">● 第六部｜都更失敗案例</p>
+                                    <ul class="list-circle pl-6 mt-1 space-y-1 text-stone-600">
+                                        <li>○ 第一章｜台灣都市更新史上最經典的5個案例</li>
+                                        <li>○ 第二章｜都市更新的十大荒謬現象</li>
+                                        <li>○ 第三章｜破解釘子戶的20個談判關鍵瞬間</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <p class="font-bold text-stone-800">● 第七部｜都更孤島：錯過時機之後的城市殘影</p>
+                                    <ul class="list-circle pl-6 mt-1 space-y-1 text-stone-600">
+                                        <li>○ 第一章｜什麼是都更孤島</li>
+                                        <li>○ 第二章｜都更孤島是怎麼形成的</li>
+                                        <li>○ 第三章｜典型孤島案例：城市中的時間斷層</li>
+                                        <li>○ 第四章｜孤島的代價：不是不更新，而是錯過更新</li>
+                                        <li>○ 第五章｜錯過更新窗口的人，最後失去了什麼</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
+
+                        <div>
+                            <h4 class="font-bold text-lg text-teal-800 mb-2 border-b border-stone-200 pb-1 mt-6">第三篇｜解法與模型</h4>
+                            <div class="ml-4 space-y-4">
+                                <div>
+                                    <p class="font-bold text-stone-800">● 第八部｜破解之道：品嘉模式——讓拖延無利，讓合作有利的制度設計</p>
+                                    <ul class="list-circle pl-6 mt-1 space-y-1 text-stone-600">
+                                        <li>○ 第一章｜為什麼很多都更整合，最後還是失敗？</li>
+                                        <li>○ 第二章｜品嘉模式：破解釘子戶的四大機制（透明、公平、紀律、退出）</li>
+                                        <li>○ 第三章｜品嘉模式的核心邏輯</li>
+                                        <li>○ 第四章｜品嘉模式的十二條鐵律</li>
+                                        <li>○ 第五章｜十二條鐵律的核心精神</li>
+                                        <li>○ 第六章｜品嘉模式整合流程：從60%到完成的結構路徑</li>
+                                        <li>○ 第七章｜品嘉模式的成功經驗：不是奇蹟，而是制度發揮作用</li>
+                                        <li>○ 第八章｜品嘉模式的產業意義：從經驗走向方法，從方法走向制度</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="font-bold text-lg text-teal-800 mb-2 border-b border-stone-200 pb-1 mt-6">第四篇｜未來與格局</h4>
+                            <div class="ml-4 space-y-4">
+                                <div>
+                                    <p class="font-bold text-stone-800">● 第九部｜未來之路：制度改革與城市的選擇</p>
+                                    <ul class="list-circle pl-6 mt-1 space-y-1 text-stone-600">
+                                        <li>○ 第一章｜都市更新，其實是一場時間競賽</li>
+                                        <li>○ 第二章｜制度的兩難：保護個人，還是推動整體？</li>
+                                        <li>○ 第三章｜國際視角：為什麼別的國家可以更快？</li>
+                                        <li>○ 第四章｜關鍵改革一：讓時間變成制度的一部分</li>
+                                        <li>○ 第五章｜關鍵改革二：從談判制度，轉為標準制度</li>
+                                        <li>○ 第六章｜關鍵改革三：建立信任型制度</li>
+                                        <li>○ 第七章｜從釘子戶問題，到城市治理問題</li>
+                                        <li>○ 第八章｜破解都市更新困局的政策改革</li>
+                                        <li>○ 第九章｜最終答案：城市會前進，但不會等所有人</li>
+                                        <li>○ 第十章｜結語：破解釘子戶，其實是在理解人性</li>
+                                    </ul>
+                                </div>
+                                <ul class="list-none space-y-1 font-semibold mt-4">
+                                    <li>● 後記｜城市，終究要往前走</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h4 class="font-bold text-lg text-teal-800 mb-2 border-b border-stone-200 pb-1 mt-6">附錄</h4>
+                            <ul class="list-none space-y-1 font-semibold ml-4">
+                                <li>● 附錄一｜都市更新Q&A</li>
+                                <li>● 附錄二｜住戶常見問題120題</li>
+                                <li>● 附錄三｜都更整合流程圖</li>
+                                <li>● 附錄四｜品嘉模式－流程、十條鐵律、20個實戰案例</li>
+                                <li>● 附錄五｜台北市15個都市更新孤島案例</li>
+                            </ul>
+                        </div>
+
                     </div>
                 </div>
-            `;
-            accordionContainer.innerHTML += itemHtml;
-        });
+            </div>
+            
+        </div>
+    </section>
 
-        function toggleAccordion(index) {
-            const content = document.getElementById(`content-${index}`);
-            const icon = document.getElementById(`icon-${index}`);
-            const isActive = content.classList.contains('active');
+    <footer class="bg-stone-900 text-stone-400 py-8 text-center">
+        <p>© 2026 品嘉關係企業 Interactive Dashboard based on 《最後10%，決定一切》</p>
+    </footer>
 
-            // Close all
-            document.querySelectorAll('.accordion-content').forEach(el => {
-                el.classList.remove('active');
-            });
-            document.querySelectorAll('[id^="icon-"]').forEach(el => {
-                el.innerText = '+';
-                el.style.transform = 'rotate(0deg)';
-            });
-
-            // Open clicked if it wasn't active
-            if (!isActive) {
-                content.classList.add('active');
-                icon.innerText = '−';
-                icon.style.transform = 'rotate(180deg)';
-            }
-        }
-
-        // --- Data Storage: International Comparison (2026 Context) ---
-        const countryData = {
-            tw: {
-                name: "台灣 (Taiwan)",
-                icon: "🇹🇼",
-                color: 'rgba(15, 118, 110, 1)', // Teal
-                bgColor: 'rgba(15, 118, 110, 0.2)',
-                stats: [8, 4, 3, 6, 5], // [私有產權保障, 政府強制力介入, 推動效率, 制度完備度, 社會信任/共識]
-                details: `
-                    <h3 class="text-2xl font-black text-teal-800 mb-4 border-b border-stone-200 pb-2">🇹🇼 台灣：私權至上與信任危機的拉扯</h3>
-                    <div class="space-y-4 text-stone-700">
-                        <p><strong>法令政策現況 (2026更新)：</strong>台灣《都市更新條例》近年歷經多次修法，主軸在於「加速危老重建」與「降低同意門檻」。針對海砂屋、耐震能力不足建物，已大幅放寬容積獎勵並簡化程序。然而，權利變換機制仍高度依賴民間建商整合，公辦都更比例雖提升但仍不足。</p>
-                        <p><strong>社會人文與文化：</strong>「有土斯有財」觀念根深蒂固，對私有產權保障極度重視。社會氛圍對建商普遍缺乏信任，導致協商成本極高（如書中所述的三方博弈）。</p>
-                        <p><strong>地理狀況：</strong>位處地震帶，都市防災更新具有極端急迫性，但推動速度遠不及建物老化速度。</p>
-                        <div class="bg-amber-50 p-4 rounded-lg border border-amber-200 mt-4">
-                            <strong class="text-amber-800">✅ 優點：</strong>產權保障極完善，聽證與救濟程序嚴謹。<br>
-                            <strong class="text-copper-600">❌ 缺點：</strong>效率低落，釘子戶（最後10%）綁架多數人安全的問題依然嚴峻，政府代為拆除（強拆）實務上仍具高度政治風險。
-                        </div>
-                    </div>`
-            },
-            jp: {
-                name: "日本 (Japan)",
-                icon: "🇯🇵",
-                color: 'rgba(180, 83, 9, 1)', // Copper
-                bgColor: 'rgba(180, 83, 9, 0.2)',
-                stats: [6, 6, 5, 9, 8],
-                details: `
-                    <h3 class="text-2xl font-black text-amber-900 mb-4 border-b border-stone-200 pb-2">🇯🇵 日本：造町運動與高度制度化的權利變換</h3>
-                    <div class="space-y-4 text-stone-700">
-                        <p><strong>法令政策現況：</strong>日本擁有極為成熟的《都市再開發法》與《都市再生特別措置法》。其核心是由具公信力的「都市再生機構 (UR)」主導或協助，並有極為精確、客觀的權利變換機制。日本設有專門的「再開發組合」，由地主組成法人推動。</p>
-                        <p><strong>社會人文與文化：</strong>強調「和」與集體主義，推行「まちづくり」（造町/社區營造）。雖然整合過程同樣漫長（通常需要10-15年溝通），但一旦達成法定比例共識，極少發生激烈抗爭。社會對公部門與專業估價機構具有較高信任。</p>
-                        <p><strong>地理狀況：</strong>同為地震頻繁國，其都更高度綁定「防災街區整備」，以國家安全高度推動。</p>
-                        <div class="bg-amber-50 p-4 rounded-lg border border-amber-200 mt-4">
-                            <strong class="text-amber-800">✅ 優點：</strong>制度設計精細無比，估價透明，社會抗爭少，強調整體街廓設計。<br>
-                            <strong class="text-copper-600">❌ 缺點：</strong>前期共識凝聚期極長（通常超過10年），對法治素養與社會信任度要求極高。
-                        </div>
-                        <p class="mt-2 text-teal-700 font-bold">💡 台灣借鏡：建立更具公信力的第三方估價審查機制，降低建商與地主的直接對立。</p>
-                    </div>`
-            },
-            sg: {
-                name: "新加坡 (Singapore)",
-                icon: "🇸🇬",
-                color: 'rgba(71, 85, 105, 1)', // Slate
-                bgColor: 'rgba(71, 85, 105, 0.2)',
-                stats: [3, 10, 9, 8, 7],
-                details: `
-                    <h3 class="text-2xl font-black text-slate-800 mb-4 border-b border-stone-200 pb-2">🇸🇬 新加坡：強勢國家主導與土地租賃制的優勢</h3>
-                    <div class="space-y-4 text-stone-700">
-                        <p><strong>法令政策現況：</strong>新加坡的都更效率全球第一。這源於其根本的土地制度：逾80%國民居住於政府組屋(HDB)，土地多為99年地上權。《土地徵收法》賦予政府極大權力。其都更主要透過 SERS（選擇性整體重建計劃）與 VERS（自願性早期重建計劃）由國家強力執行。</p>
-                        <p><strong>社會人文與文化：</strong>國民習慣並接受政府的高度治理與菁英決策。對「公共利益」的定義往往凌駕於個人的財產絕對權之上。</p>
-                        <p><strong>地理狀況：</strong>腹地極小，土地資源極度稀缺，因此政府必須以最高效率進行土地的循環利用與重整。</p>
-                        <div class="bg-amber-50 p-4 rounded-lg border border-amber-200 mt-4">
-                            <strong class="text-amber-800">✅ 優點：</strong>推動效率極高，完全沒有「釘子戶」阻礙城市發展的問題，整體城市規劃完美。<br>
-                            <strong class="text-copper-600">❌ 缺點：</strong>私有產權概念相對薄弱，幾乎無法複製到具備完全土地私有權的民主憲政國家（如台灣）。
-                        </div>
-                        <p class="mt-2 text-teal-700 font-bold">💡 台灣借鏡：在特定「策略性更新地區」（如捷運聯開、重大災區），政府應仿效其強勢主導的精神，而非僅依賴民間力量。</p>
-                    </div>`
-            },
-            kr: {
-                name: "韓國 (S. Korea)",
-                icon: "🇰🇷",
-                color: 'rgba(55, 65, 81, 1)', // Gray
-                bgColor: 'rgba(55, 65, 81, 0.2)',
-                stats: [5, 8, 7, 7, 4],
-                details: `
-                    <h3 class="text-2xl font-black text-gray-800 mb-4 border-b border-stone-200 pb-2">🇰🇷 韓國：大破大立的開發主義與社會陣痛</h3>
-                    <div class="space-y-4 text-stone-700">
-                        <p><strong>法令政策現況：</strong>主要依據《城市與居住環境整備法》。韓國早期都更（再開發）多由大型財閥/建商主導，政府給予強大公權力支持（包括強制驅離）。近年歷經修法，開始重視「住居環境改善事業」，強化公共管理，但在法定期限與執行力上仍具強制性。</p>
-                        <p><strong>社會人文與文化：</strong>擁有「Pali-Pali (快點快點)」的民族性，追求效率與現代化。然而，早年粗暴的強拆模式（如龍山慘案）導致極嚴重的社會撕裂與原住戶迫遷問題。近年社會對居住正義的呼聲高漲，制度正向折衷方向調整。</p>
-                        <p><strong>地理狀況：</strong>首爾等大都會區人口極度密集，地形多丘陵，老舊棚戶區亟需整頓以釋放土地價值。</p>
-                        <div class="bg-amber-50 p-4 rounded-lg border border-amber-200 mt-4">
-                            <strong class="text-amber-800">✅ 優點：</strong>更新速度快，能在短時間內徹底翻轉大面積不良市容，創造巨大經濟效益。<br>
-                            <strong class="text-copper-600">❌ 缺點：</strong>原住戶安置問題嚴重，社會抗爭激烈，產生過多「都市難民」。
-                        </div>
-                        <p class="mt-2 text-teal-700 font-bold">💡 台灣借鏡：警惕過度追求速度與建商主導帶來的迫遷悲劇，都更不能只看硬體更新，安置與社會安定同等重要。</p>
-                    </div>`
-            }
-        };
-
-        // --- Chart.js Initialization ---
-        let radarChart;
-        const ctx = document.getElementById('radarChart').getContext('2d');
-        
-        // Define common chart options enforcing boundaries
-        const chartOptions = {
-            responsive: true,
-            maintainAspectRatio: false, // CRITICAL: allows canvas to stretch to container limits
-            scales: {
-                r: {
-                    angleLines: { color: 'rgba(0,0,0,0.1)' },
-                    grid: { color: 'rgba(0,0,0,0.05)' },
-                    pointLabels: {
-                        font: { family: "'Noto Sans TC', sans-serif", size: 12, weight: 'bold' },
-                        color: '#444'
-                    },
-                    ticks: {
-                        min: 0,
-                        max: 10,
-                        stepSize: 2,
-                        display: false // Hide numbers for cleaner look
-                    }
-                }
-            },
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    backgroundColor: 'rgba(28, 25, 23, 0.9)',
-                    titleFont: { family: "'Noto Sans TC', sans-serif", size: 14 },
-                    bodyFont: { family: "'Noto Sans TC', sans-serif", size: 13 },
-                    padding: 10,
-                    cornerRadius: 4,
-                }
-            }
-        };
-
-        function initChart(countryKey) {
-            const data = countryData[countryKey];
-            const chartData = {
-                labels: ['私有產權保障', '政府公權力介入', '更新推動效率', '法規制度完備度', '社會信任/共識'],
-                datasets: [{
-                    label: data.name,
-                    data: data.stats,
-                    backgroundColor: data.bgColor,
-                    borderColor: data.color,
-                    pointBackgroundColor: data.color,
-                    pointBorderColor: '#fff',
-                    pointHoverBackgroundColor: '#fff',
-                    pointHoverBorderColor: data.color,
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 定義所有國家的完整資料集
+            const baseDatasets = [
+                {
+                    id: 'tw',
+                    label: '台灣',
+                    data: [4, 3, 9, 7, 2],
+                    backgroundColor: 'rgba(15, 118, 110, 0.2)', // teal
+                    borderColor: 'rgba(15, 118, 110, 1)',
                     borderWidth: 2,
-                }]
-            };
+                    pointBackgroundColor: 'rgba(15, 118, 110, 1)'
+                },
+                {
+                    id: 'sg',
+                    label: '新加坡',
+                    data: [9, 9, 3, 4, 8],
+                    backgroundColor: 'rgba(217, 119, 6, 0.2)', // amber
+                    borderColor: 'rgba(217, 119, 6, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(217, 119, 6, 1)'
+                },
+                {
+                    id: 'jp',
+                    label: '日本',
+                    data: [6, 4, 7, 9, 1],
+                    backgroundColor: 'rgba(68, 64, 60, 0.2)', // stone
+                    borderColor: 'rgba(68, 64, 60, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(68, 64, 60, 1)'
+                },
+                {
+                    id: 'kr',
+                    label: '韓國',
+                    data: [8, 8, 4, 5, 7],
+                    backgroundColor: 'rgba(225, 29, 72, 0.2)', // rose
+                    borderColor: 'rgba(225, 29, 72, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(225, 29, 72, 1)'
+                }
+            ];
 
-            if (radarChart) {
-                radarChart.data = chartData;
-                radarChart.update();
-            } else {
-                radarChart = new Chart(ctx, {
+            const ctxRadar = document.getElementById('radarChart');
+            let radarChart; 
+            
+            if (ctxRadar) {
+                radarChart = new Chart(ctxRadar.getContext('2d'), {
                     type: 'radar',
-                    data: chartData,
-                    options: chartOptions
+                    data: {
+                        labels: ['公權力介入強度', '整合效率/速度', '私有產權保護', '民眾參與共識', '強制驅離風險'],
+                        datasets: [baseDatasets[0]]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                min: 0,
+                                max: 10,
+                                ticks: { display: false }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { font: { family: "'Noto Sans TC', sans-serif" } }
+                            }
+                        }
+                    }
                 });
             }
-        }
 
-        // --- Interaction Logic: Country Buttons ---
-        const detailPanel = document.getElementById('country-detail-panel');
-        const buttons = document.querySelectorAll('.country-btn');
+            window.switchTab = function(countryCode) {
+                document.querySelectorAll('.tab-btn').forEach(btn => {
+                    btn.classList.remove('bg-teal-700', 'text-white', 'active-tab');
+                    btn.classList.add('bg-stone-100', 'text-stone-600');
+                });
+                const activeBtn = document.querySelector(`button[onclick="switchTab('${countryCode}')"]`);
+                if(activeBtn) {
+                    activeBtn.classList.remove('bg-stone-100', 'text-stone-600');
+                    activeBtn.classList.add('bg-teal-700', 'text-white', 'active-tab');
+                }
 
-        function selectCountry(key, btnElement) {
-            // Update UI styling for buttons
-            buttons.forEach(btn => {
-                btn.classList.remove('bg-teal-700', 'text-white');
-                btn.classList.add('bg-white', 'text-stone-600');
-            });
-            btnElement.classList.remove('bg-white', 'text-stone-600');
-            btnElement.classList.add('bg-teal-700', 'text-white');
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.add('hidden');
+                    content.classList.remove('block');
+                });
+                const activeTab = document.getElementById(`tab-${countryCode}`);
+                if(activeTab) {
+                    activeTab.classList.remove('hidden');
+                    activeTab.classList.add('block');
+                }
 
-            // Update Text Content
-            detailPanel.innerHTML = countryData[key].details;
+                if(radarChart) {
+                    const selectedDataset = baseDatasets.find(ds => ds.id === countryCode);
+                    radarChart.data.datasets = [selectedDataset];
+                    radarChart.update();
+                }
+            };
+        });
+
+        function toggleAccordion(id) {
+            const content = document.getElementById(`content-${id}`);
+            const icon = document.getElementById(`icon-${id}`);
             
-            // Add subtle fade animation to content
-            detailPanel.style.opacity = '0.5';
-            setTimeout(() => { detailPanel.style.opacity = '1'; detailPanel.style.transition = 'opacity 0.3s ease'; }, 50);
-
-            // Update Chart
-            initChart(key);
+            if (content.classList.contains('hidden')) {
+                for(let i=1; i<=7; i++) {
+                    const c = document.getElementById(`content-${i}`);
+                    const ic = document.getElementById(`icon-${i}`);
+                    if(c && ic) {
+                        c.classList.add('hidden');
+                        ic.innerHTML = '&#9660;'; 
+                        ic.style.transform = "rotate(0deg)";
+                    }
+                }
+                content.classList.remove('hidden');
+                icon.style.transform = "rotate(180deg)";
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = "rotate(0deg)";
+            }
         }
 
-        // Attach event listeners to buttons
-        buttons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const key = e.target.getAttribute('data-country');
-                selectCountry(key, e.target);
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => {
+                    b.classList.remove('bg-stone-800', 'text-white');
+                    b.classList.add('bg-white', 'text-stone-600');
+                });
+                this.classList.remove('bg-white', 'text-stone-600');
+                this.classList.add('bg-stone-800', 'text-white');
+
+                const filterValue = this.getAttribute('data-filter');
+                const cards = document.querySelectorAll('.qa-card');
+
+                cards.forEach(card => {
+                    if (filterValue === 'all' || card.getAttribute('data-category') === filterValue) {
+                        card.style.display = 'block';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
             });
         });
-
-        // Initialize with Taiwan Data
-        window.addEventListener('DOMContentLoaded', () => {
-            const defaultBtn = document.querySelector('[data-country="tw"]');
-            selectCountry('tw', defaultBtn);
-        });
-
     </script>
 </body>
 </html>
